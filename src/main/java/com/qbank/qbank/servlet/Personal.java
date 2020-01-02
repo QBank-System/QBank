@@ -26,7 +26,7 @@ public class Personal {
         String workNumber = request.getParameter("work_number");
         String password = request.getParameter("password");
 
-        JsonArray resultSet = new JsonArray();
+        JsonObject result = new JsonObject();
         try {
             Connection conn = DatabaseOperations.getConnection();
             PreparedStatement pstm;
@@ -39,6 +39,7 @@ public class Personal {
             rs = pstm.executeQuery();
 
             if (rs.next()) {
+                result.addProperty("state", 1);
                 JsonObject object = new JsonObject();
                 object.addProperty("user_id", rs.getString(1));
                 object.addProperty("user_case", rs.getString(2));
@@ -53,13 +54,14 @@ public class Personal {
                 object.addProperty("user_office", rs.getString(11));
                 object.addProperty("user_create_time", rs.getString(12));
                 object.addProperty("user_grade", rs.getString(13));
-                resultSet.add(object);
+                result.add("personal", object);
+            } else {
+                result.addProperty("state", 0);
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ResponseEntity<>(resultSet.toString(), HttpStatus.OK);
+        return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 
 }

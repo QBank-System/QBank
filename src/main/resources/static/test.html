@@ -62,7 +62,8 @@
 
                 <div class="row">
                     <div class="col-sm-4 col-xs-12">
-                        <div id="gtco-logo"><a href="../src/main/resources/templates/index.html">QBank <em>.</em></a></div>
+                        <div id="gtco-logo"><a href="../src/main/resources/templates/index.html">QBank <em>.</em></a>
+                        </div>
                     </div>
                     <div class="col-xs-8 text-right menu-1">
                         <ul>
@@ -122,8 +123,8 @@
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="submit" value="登&nbsp&nbsp录" class="btn btn-primary">
-                  
+                                    <input type="submit" value="登&nbsp&nbsp录" onclick="init()" class="btn btn-primary">
+
                                     <input type="submit" value="注&nbsp&nbsp册" class="btn btn-primary">
                                 </div>
 
@@ -193,21 +194,28 @@
 
 <!--登录响应-->
 <script>
-	function init(i) {
-		var work_number = getElementById("work_number").value;
-		var password = getElementById("password").value;
-		
-		$.post("/QBank/Login", {
-			work_number : work_number,
-			password :password
-			
-		}, function(data, status) {
-			
-			var result = eval('(' + data + ')');
-			alert(result);
+    function init() {
+        const work_number = document.getElementById("work_number").value;
+        const password = document.getElementById("password").value;
+
+        $.post("/Login", {
+            work_number: work_number,
+            password: password
+
+        }, function (data, status) {
+            // alert(data.user_professional_field.toString());
 
 
-//			var count = o["num"];
+            const o = eval('(' + data + ')');
+            const state = o["state"];
+            if (state === 0) {
+                alert(state);
+            } else {
+                const personal = o["personal"];
+                const user_name = personal["user_name"];
+                const user_professional_field = personal["user_professional_field"];
+                alert(user_name + "   " + user_professional_field);
+            }
 //			document.getElementById("ull").innerHTML ="";
 //			for(var l = 1;l<=count/10+1;l++){
 //				document.getElementById("ull").innerHTML +="<li id='l"+l+"'><a onclick='init("+l+")'>"+l+"</a></li>";
@@ -216,9 +224,9 @@
 //			$("#num").text("共 " + count + " 条记录");
 //			init(1);
 
-		});
+        });
 
-	}
+    }
 </script>
 
 
