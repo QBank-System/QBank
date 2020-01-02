@@ -201,11 +201,7 @@
         $.post("/Login", {
             work_number: work_number,
             password: password
-
         }, function (data, status) {
-            // alert(data.user_professional_field.toString());
-
-
             const o = eval('(' + data + ')');
             const state = o["state"];
             if (state === 0) {
@@ -214,16 +210,8 @@
                 const personal = o["personal"];
                 const user_name = personal["user_name"];
                 const user_professional_field = personal["user_professional_field"];
-                alert(user_name + "   " + user_professional_field);
+                alert("data:" + data.toString() + "\n" + user_name + "   " + user_professional_field);
             }
-//			document.getElementById("ull").innerHTML ="";
-//			for(var l = 1;l<=count/10+1;l++){
-//				document.getElementById("ull").innerHTML +="<li id='l"+l+"'><a onclick='init("+l+")'>"+l+"</a></li>";
-//			}
-//			num1 = count;
-//			$("#num").text("共 " + count + " 条记录");
-//			init(1);
-
         });
 
     }
