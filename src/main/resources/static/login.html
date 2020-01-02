@@ -20,7 +20,6 @@
     <meta name="twitter:card" content=""/>
 
     <link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
-
     <!-- Animate.css -->
     <link type="text/css" rel="stylesheet" href="css/animate.css">
     <!-- Icomoon Icon Fonts-->
@@ -63,7 +62,8 @@
 
                 <div class="row">
                     <div class="col-sm-4 col-xs-12">
-                        <div id="gtco-logo"><a href="../src/main/resources/templates/index.html">QBank <em>.</em></a></div>
+                        <div id="gtco-logo"><a href="../src/main/resources/templates/index.html">QBank <em>.</em></a>
+                        </div>
                     </div>
                     <div class="col-xs-8 text-right menu-1">
                         <ul>
@@ -109,22 +109,22 @@
                             <form action="#">
                                 <div class="row form-group">
                                     <div class="col-md-12">
-                                        <label class="sr-only" for="name">Work_Number</label>
-                                        <input type="text" id="name" class="form-control" placeholder="请输入您的职工号">
+                                        <label class="sr-only" for="work_number">Work_Number</label>
+                                        <input type="text" id="work_number" class="form-control" placeholder="请输入您的职工号">
                                     </div>
 
                                 </div>
 
                                 <div class="row form-group">
                                     <div class="col-md-12">
-                                        <label class="sr-only" for="email">Password</label>
-                                        <input type="text" id="email" class="form-control" placeholder="请输入您的密码">
+                                        <label class="sr-only" for="password">Password</label>
+                                        <input type="text" id="password" class="form-control" placeholder="请输入您的密码">
                                     </div>
                                 </div>
 
                                 <div class="form-group">
-                                    <input type="submit" value="登&nbsp&nbsp录" class="btn btn-primary">
-                  
+                                    <input type="submit" value="登&nbsp&nbsp录" onclick="init()" class="btn btn-primary">
+
                                     <input type="submit" value="注&nbsp&nbsp册" class="btn btn-primary">
                                 </div>
 
@@ -191,6 +191,44 @@
 <script src="js/magnific-popup-options.js"></script>
 <!-- Main -->
 <script src="js/main.js"></script>
+
+<!--登录响应-->
+<script>
+    function init() {
+        const work_number = document.getElementById("work_number").value;
+        const password = document.getElementById("password").value;
+
+        $.post("/Login", {
+            work_number: work_number,
+            password: password
+
+        }, function (data, status) {
+            // alert(data.user_professional_field.toString());
+
+
+            const o = eval('(' + data + ')');
+            const state = o["state"];
+            if (state === 0) {
+                alert(state);
+            } else {
+                const personal = o["personal"];
+                const user_name = personal["user_name"];
+                const user_professional_field = personal["user_professional_field"];
+                alert(user_name + "   " + user_professional_field);
+            }
+//			document.getElementById("ull").innerHTML ="";
+//			for(var l = 1;l<=count/10+1;l++){
+//				document.getElementById("ull").innerHTML +="<li id='l"+l+"'><a onclick='init("+l+")'>"+l+"</a></li>";
+//			}
+//			num1 = count;
+//			$("#num").text("共 " + count + " 条记录");
+//			init(1);
+
+        });
+
+    }
+</script>
+
 
 </body>
 </html>
