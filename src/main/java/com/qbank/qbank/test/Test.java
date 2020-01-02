@@ -11,6 +11,7 @@ public class Test {
 
     @RequestMapping("/Index")
     public String index(){
-        return "index";
+        return "login";
     }
+
 }
