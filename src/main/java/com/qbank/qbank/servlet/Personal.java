@@ -85,7 +85,7 @@ public class Personal {
             if (rs.next()) {
                 result.addProperty("state", 0);
             } else {
-                sql = "insert into user(user_name, user_work_number, user_password, user_college, user_phone_number, user_creat_time, user_grade) value ('" + userName + "','" + userWorkNumber + "','" + userPassword + "','" + userCollege + "','" + userPhoneNumber + "','" + getTime() + "','2')";
+                sql = "insert into user(user_name, user_work_number, user_password, user_college, user_phone_number, user_create_time, user_grade) value ('" + userName + "','" + userWorkNumber + "','" + userPassword + "','" + userCollege + "','" + userPhoneNumber + "','" + getTime() + "','2')";
                 pstm = conn.prepareStatement(sql);
                 if (pstm.executeUpdate() == 1) {
                     result.addProperty("state", 1);
