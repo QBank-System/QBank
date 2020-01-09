@@ -83,51 +83,33 @@ public class DatabaseOperations {
     /**
      * 数据库查询
      *
-     * @param sql  数据库语句
+     * @param pstm PreparedStatement
      * @param args 对象集
      * @return 查询结果集
      */
-    public static ResultSet exQuery(String sql, Object[] args) {
-        ResultSet sum = null;
-        PreparedStatement pstm;
-        try {
-            pstm = DatabaseOperations.getConnection().prepareStatement(sql);
-            if (null != args) {
-                for (int i = 0; i < args.length; i++) {
-                    pstm.setObject(i + 1, args[i]);
-                }
+    public static ResultSet exQuery(PreparedStatement pstm, Object[] args) throws SQLException {
+        if (null != args) {
+            for (int i = 0; i < args.length; i++) {
+                pstm.setObject(i + 1, args[i]);
             }
-            sum = pstm.executeQuery();
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        return sum;
+        return pstm.executeQuery();
     }
 
     /**
      * 数据库更新
      *
-     * @param sql  数据库语句
+     * @param pstm PreparedStatement
      * @param args 对象集
      * @return 更新影响条数
      */
-    public static int exUpdate(String sql, Object[] args) {
-        int sum = 0;
-        PreparedStatement pstm = null;
-        try {
-            pstm = DatabaseOperations.getConnection().prepareStatement(sql);
-            if (null != args) {
-                for (int i = 0; i < args.length; i++) {
-                    pstm.setObject(i + 1, args[i]);
-                }
+    public static int exUpdate(PreparedStatement pstm, Object[] args) throws SQLException {
+        if (null != args) {
+            for (int i = 0; i < args.length; i++) {
+                pstm.setObject(i + 1, args[i]);
             }
-            sum = pstm.executeUpdate();
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            DatabaseOperations.closeAll(null, pstm, null);
         }
-        return sum;
+        return pstm.executeUpdate();
     }
 
 

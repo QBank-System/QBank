@@ -1,0 +1,21 @@
+/QueryAllQuestions
+    request:
+        user_work_number[]
+        user_password[]
+    return:
+        state[int]
+        personal[(state==1)用户信息,包含
+            user_id[int]
+            user_case[头像地址，url]
+            user_work_number[学工号]
+            user_password[密码]
+            user_name[用户名]
+            user_title[用户职称]
+            user_college[所属学院]
+            user_professional_field[专业领域]
+            user_phone_number[电话号码]
+            user_email[邮箱地址]
+            user_office[办公地址]
+            user_create_time[创建时间]
+            user_grade[功能权限]
+            ]
