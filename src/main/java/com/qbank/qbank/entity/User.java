@@ -54,6 +54,10 @@ public class User {
      * 功能权限
      */
     private String userGrade;
+    /**
+     * 用户创建时间
+     */
+    private String userTime;
 
     /**
      * default constructor
@@ -80,6 +84,7 @@ public class User {
         this.userMail = userMail;
         this.userOffice = userOffice;
         this.userGrade = userGrade;
+        this.userTime = userTime;
     }
 
     // Property accessors
@@ -180,5 +185,12 @@ public class User {
         this.userGrade = userGrade;
     }
 
+    public String getUserTime() {
+        return userTime;
+    }
+
+    public void setUserTime(String userTime) {
+        this.userTime = userTime;
+    }
 
 }

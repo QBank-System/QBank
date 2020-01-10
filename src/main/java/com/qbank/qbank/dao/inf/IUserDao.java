@@ -1,9 +1,7 @@
 package com.qbank.qbank.dao.inf;
 
 import com.qbank.qbank.entity.User;
-import org.apache.ibatis.jdbc.SQL;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -85,16 +83,16 @@ public interface IUserDao {
      * @return 用户
      * @throws SQLException SQLException
      */
-    User getUserByUserId(String index, int indexClass) throws SQLException;
+    User getUser(String index, int indexClass) throws SQLException;
 
     /**
-     * 通过索引模糊查找一组用户
+     * 通过索引在userId,userWorkNumber,userName中模糊查找一组用户
      *
      * @param index 索引
      * @return 用户组
      * @throws SQLException SQLException
      */
-    List<User> getUsersByUserId(String index) throws SQLException;
+    List<User> getUsers(String index) throws SQLException;
 
 
 }

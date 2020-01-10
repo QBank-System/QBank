@@ -8,6 +8,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.qbank.qbank.utils.MyTime.getTime;
@@ -17,13 +18,28 @@ import static com.qbank.qbank.utils.MyTime.getTime;
  * @date 2020/1/9 14:52
  */
 public class UserDaoImpl implements IUserDao {
+    private static UserDaoImpl userDao;
     private Connection conn;
     private PreparedStatement pstm;
     private ResultSet rs;
     private String sql;
+    public final static int CLASS_USERID = 1;
+    public final static int CLASS_USERWORKNUMBER = 2;
+    public final static int CLASS_USERNAME = 3;
 
-    public UserDaoImpl(Connection conn) {
-        this.conn = conn;
+    public UserDaoImpl() {
+        this.conn = DatabaseOperations.getConnection();
+    }
+
+    public static UserDaoImpl getUserDao() {
+        if (userDao == null) {
+            userDao = new UserDaoImpl();
+        }
+        return userDao;
+    }
+
+    public void closeAll() {
+        DatabaseOperations.closeAll(conn, pstm, rs);
     }
 
     @Override
@@ -40,7 +56,6 @@ public class UserDaoImpl implements IUserDao {
         sql = "insert into user(work_number,password,name,college,phone_number,grade,time)value(?,?,?,?,?,?,?)";
         pstm = conn.prepareStatement(sql);
         result = DatabaseOperations.exUpdate(pstm, objects);
-        DatabaseOperations.closeAll(null, pstm, null);
         return result;
     }
 
@@ -50,7 +65,6 @@ public class UserDaoImpl implements IUserDao {
         for (User user : users) {
             result += addUser(user);
         }
-        DatabaseOperations.closeAll(conn, pstm, null);
         return result;
     }
 
@@ -60,20 +74,27 @@ public class UserDaoImpl implements IUserDao {
         objects[0] = index;
         int result = 0;
         switch (indexClass) {
-            case 1:
+            case CLASS_USERID:
                 sql = "delete from user where user.id=?;";
                 break;
-            case 2:
+            case CLASS_USERWORKNUMBER:
                 sql = "delete from user where user.work_number=?;";
                 break;
-            case 3:
+            case CLASS_USERNAME:
                 sql = "delete from user where user.name=?;";
                 break;
             default:
         }
         pstm = conn.prepareStatement(sql);
         result = DatabaseOperations.exUpdate(pstm, objects);
-        DatabaseOperations.closeAll(null, pstm, null);
+        sql = "select user.id from user order by user.id desc limit 1;";
+        pstm = conn.prepareStatement(sql);
+        rs = pstm.executeQuery();
+        rs.next();
+        int AUTO_INCREMENT = rs.getInt(1);
+        sql = "alter table qbank.user auto_increment=" + AUTO_INCREMENT + ";";
+        pstm = conn.prepareStatement(sql);
+        pstm.executeUpdate();
         return result;
     }
 
@@ -83,7 +104,6 @@ public class UserDaoImpl implements IUserDao {
         for (int i = 0; i < index.length; i++) {
             result += delUser(index[i], indexClass[i]);
         }
-        DatabaseOperations.closeAll(null, pstm, null);
         return result;
     }
 
@@ -101,12 +121,11 @@ public class UserDaoImpl implements IUserDao {
         objects[8] = user.getUserMail();
         objects[9] = user.getUserOffice();
         objects[10] = user.getUserId();
-        int result = 0;
+        int result;
         conn = DatabaseOperations.getConnection();
         sql = "update user set user.case=?,user.work_number=?,user.password=?,user.name=?,user.title=?,user.college=?,user.professional_field=?,user.phone_number=?,user.mail=?,user.office=?where user.id=?;";
         pstm = conn.prepareStatement(sql);
         result = DatabaseOperations.exUpdate(pstm, objects);
-        DatabaseOperations.closeAll(null, pstm, null);
         return result;
     }
 
@@ -120,14 +139,71 @@ public class UserDaoImpl implements IUserDao {
     }
 
     @Override
-    public User getUserByUserId(String index, int indexClass) throws SQLException {
-
-        return null;
+    public User getUser(String index, int indexClass) throws SQLException {
+        User user = new User();
+        switch (indexClass) {
+            case CLASS_USERID:
+                sql = "select * from user where user.id=" + index + ";";
+                break;
+            case CLASS_USERWORKNUMBER:
+                sql = "select * from user where user.work_number=" + index + ";";
+                break;
+            case CLASS_USERNAME:
+                sql = "select * from user where user.name=" + index + ";";
+                break;
+            default:
+        }
+        pstm = conn.prepareStatement(sql);
+        rs = pstm.executeQuery();
+        if (rs.next()) {
+            user.setUserId(rs.getString(1));
+            user.setUserCase(rs.getString(2));
+            user.setUserWorkNumber(rs.getString(3));
+            user.setUserPassword(rs.getString(4));
+            user.setUserName(rs.getString(5));
+            user.setUserTitle(rs.getString(6));
+            user.setUserCollege(rs.getString(7));
+            user.setUserProfessionalField(rs.getString(8));
+            user.setUserPhoneNumber(rs.getString(9));
+            user.setUserMail(rs.getString(10));
+            user.setUserOffice(rs.getString(11));
+            user.setUserGrade(rs.getString(12));
+            user.setUserTime(rs.getString(13));
+        } else {
+            user.setUserId("0");
+        }
+        return user;
     }
 
     @Override
-    public List<User> getUsersByUserId(String index) throws SQLException {
-        return null;
+    public List<User> getUsers(String index) throws SQLException {
+        index = "%" + index + "%";
+        List<User> list = new LinkedList<>();
+        Object[] objects = new Object[3];
+        objects[0] = index;
+        objects[1] = index;
+        objects[2] = index;
+        sql = "select * from user where cast(user.id as char) like ? or cast(user.work_number as char)  like ? or user.name  like ? ;";
+        pstm = conn.prepareStatement(sql);
+        rs = DatabaseOperations.exQuery(pstm, objects);
+        while (rs.next()) {
+            User user = new User();
+            user.setUserId(rs.getString(1));
+            user.setUserCase(rs.getString(2));
+            user.setUserWorkNumber(rs.getString(3));
+            user.setUserPassword(rs.getString(4));
+            user.setUserName(rs.getString(5));
+            user.setUserTitle(rs.getString(6));
+            user.setUserCollege(rs.getString(7));
+            user.setUserProfessionalField(rs.getString(8));
+            user.setUserPhoneNumber(rs.getString(9));
+            user.setUserMail(rs.getString(10));
+            user.setUserOffice(rs.getString(11));
+            user.setUserGrade(rs.getString(12));
+            user.setUserTime(rs.getString(13));
+            list.add(user);
+        }
+        return list;
     }
 
 }
