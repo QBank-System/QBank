@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class Test {
 
-    @RequestMapping("/Index")
-    public String index(){
+    @RequestMapping("/Test")
+    public String test(){
         return "login";
     }
 

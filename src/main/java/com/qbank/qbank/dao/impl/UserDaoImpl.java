@@ -3,6 +3,7 @@ package com.qbank.qbank.dao.impl;
 import com.qbank.qbank.dao.inf.IUserDao;
 import com.qbank.qbank.entity.User;
 import com.qbank.qbank.utils.DatabaseOperations;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,9 +24,6 @@ public class UserDaoImpl implements IUserDao {
     private PreparedStatement pstm;
     private ResultSet rs;
     private String sql;
-    public final static int CLASS_USERID = 1;
-    public final static int CLASS_USERWORKNUMBER = 2;
-    public final static int CLASS_USERNAME = 3;
 
     public UserDaoImpl() {
         this.conn = DatabaseOperations.getConnection();
@@ -46,7 +44,7 @@ public class UserDaoImpl implements IUserDao {
     public int addUser(User user) throws SQLException {
         Object[] objects = new Object[7];
         objects[0] = user.getUserWorkNumber();
-        objects[1] = user.getUserPassword();
+        objects[1] = DigestUtils.sha1Hex(user.getUserPassword());
         objects[2] = user.getUserName();
         objects[3] = user.getUserCollege();
         objects[4] = user.getUserPhoneNumber();
@@ -84,6 +82,7 @@ public class UserDaoImpl implements IUserDao {
                 sql = "delete from user where user.name=?;";
                 break;
             default:
+                return 0;
         }
         pstm = conn.prepareStatement(sql);
         result = DatabaseOperations.exUpdate(pstm, objects);
@@ -140,21 +139,24 @@ public class UserDaoImpl implements IUserDao {
 
     @Override
     public User getUser(String index, int indexClass) throws SQLException {
+        Object[] objects = new Object[1];
+        objects[0] = index;
         User user = new User();
         switch (indexClass) {
             case CLASS_USERID:
-                sql = "select * from user where user.id=" + index + ";";
+                sql = "select * from user where user.id=?;";
                 break;
             case CLASS_USERWORKNUMBER:
-                sql = "select * from user where user.work_number=" + index + ";";
+                sql = "select * from user where user.work_number=?;";
                 break;
             case CLASS_USERNAME:
-                sql = "select * from user where user.name=" + index + ";";
+                sql = "select * from user where user.name=?;";
                 break;
             default:
+                return null;
         }
         pstm = conn.prepareStatement(sql);
-        rs = pstm.executeQuery();
+        rs = DatabaseOperations.exQuery(pstm, objects);
         if (rs.next()) {
             user.setUserId(rs.getString(1));
             user.setUserCase(rs.getString(2));
@@ -170,7 +172,7 @@ public class UserDaoImpl implements IUserDao {
             user.setUserGrade(rs.getString(12));
             user.setUserTime(rs.getString(13));
         } else {
-            user.setUserId("0");
+            user = null;
         }
         return user;
     }

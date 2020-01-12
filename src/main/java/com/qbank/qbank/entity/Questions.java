@@ -1,11 +1,13 @@
 package com.qbank.qbank.entity;
 
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @author 王宇杰
  * @date 2020/1/9 12:44
  */
-public class Questions {
+public class Questions implements MyObj {
 
     /**
      * id
@@ -116,4 +118,9 @@ public class Questions {
     }
 
 
+    @Override
+    public JSONObject toJson() {
+        //TODO ToJson
+        return null;
+    }
 }

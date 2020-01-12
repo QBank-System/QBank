@@ -1,10 +1,25 @@
 package com.qbank.qbank.dto;
 
+import com.alibaba.fastjson.JSONObject;
+import com.qbank.qbank.entity.MyObj;
+
 /**
  * @author 王宇杰
  * @date 2020/1/9 14:46
  */
-public class MvcDataDto {
+public class MvcDataDto implements MyObj {
+    /**
+     * 成功
+     */
+    public static final String SUCCESS = "success";
+    /**
+     * 失败
+     */
+    public static final String FAIL = "fail";
+    /**
+     * 错误
+     */
+    public static final String ERROR = "error";
     /**
      * 返回代码
      */
@@ -16,7 +31,11 @@ public class MvcDataDto {
     /**
      * 返回数据对象(自定义)
      */
-    private Object resultObj;
+    private MyObj resultObj;
+    /**
+     * 返回后跳转页面
+     */
+    private String redirectUrl;
 
     public String getResultCode() {
         return resultCode;
@@ -34,12 +53,29 @@ public class MvcDataDto {
         this.resultMessage = resultMessage;
     }
 
-    public Object getResultObj() {
+    public MyObj getResultObj() {
         return resultObj;
     }
 
-    public void setResultObj(Object resultObj) {
+    public void setResultObj(MyObj resultObj) {
         this.resultObj = resultObj;
     }
 
+    public String getRedirectUrl() {
+        return redirectUrl;
+    }
+
+    public void setRedirectUrl(String redirectUrl) {
+        this.redirectUrl = redirectUrl;
+    }
+
+    @Override
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("resultCode", resultCode);
+        object.put("resultMessage", resultMessage);
+        object.put("resultObj", resultObj.toJson());
+        object.put("redirectUrl", redirectUrl);
+        return object;
+    }
 }

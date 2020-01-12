@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>主页面</title>
+</head>
+<body>
+
+<h1 align="center">首页</h1>
+</body>
+<script>
+    window.onload = function () {
+        const user = sessionStorage.getItem("User");
+        if (user === null) {
+            //window.location.href = "http://47.101.209.223/QBank";
+            window.location.href = "http://localhost";
+        } else {
+            alert("User" + user);
+        }
+    }
+</script>
+</html>

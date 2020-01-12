@@ -27,7 +27,7 @@ public class Personal {
     private String operator;
     private String remark;
 
-    @RequestMapping("/Login")
+    @RequestMapping("/Login2")
     public ResponseEntity<String> login(HttpServletRequest request) {
         operation = "";
         operator = "";
@@ -78,7 +78,7 @@ public class Personal {
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 
-    @RequestMapping("/Register")
+    @RequestMapping("/Register2")
     public ResponseEntity<String> register(HttpServletRequest request) {
         operation = "";
         operator = "";
@@ -145,7 +145,7 @@ public class Personal {
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 
-    @RequestMapping("/SendVerificationCode")
+    @RequestMapping("/SendVerificationCode2")
     public ResponseEntity<String> sendVerificationCode(HttpServletRequest request) {
         operation = "";
         operator = "";

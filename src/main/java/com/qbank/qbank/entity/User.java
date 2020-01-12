@@ -1,10 +1,12 @@
 package com.qbank.qbank.entity;
 
+import com.alibaba.fastjson.JSONObject;
+
 /**
  * @author 王宇杰
  * @date 2020/1/9 12:22
  */
-public class User {
+public class User implements MyObj {
 
     /**
      * id
@@ -193,4 +195,22 @@ public class User {
         this.userTime = userTime;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject object = new JSONObject();
+        object.put("userId", userId);
+        object.put("userCase", userCase);
+        object.put("userWorkNumber", userWorkNumber);
+        object.put("userPassword", userPassword);
+        object.put("userName", userName);
+        object.put("userTitle", userTitle);
+        object.put("userCollege", userCollege);
+        object.put("userProfessionalField", userProfessionalField);
+        object.put("userPhoneNumber", userPhoneNumber);
+        object.put("userMail", userMail);
+        object.put("userOffice", userOffice);
+        object.put("userGrade", userGrade);
+        object.put("userTime", userTime);
+        return object;
+    }
 }
