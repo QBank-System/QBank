@@ -193,19 +193,22 @@
 <script src="js/main.js"></script>
 <!--SHA1加密-->
 <script src="js/SHA1.js"></script>
+<!--加载web配置文件-->
+<script src="js/webProperties.js"></script>
 <!--登录响应-->
 <script>
     window.onload = function () {
         const user = sessionStorage.getItem("User");
         if (user !== null) {
-            //window.location.href = "http://47.101.209.223/QBank/Main";
-            window.location.href = "http://localhost/Main";
+            window.location.href = getHostUrl()+"/Main";
         }
     }
+
     function init() {
         const work_number = document.getElementById("work_number").value;
         const password = document.getElementById("password").value;
-        $.post("/Login/Login", {
+        const url = getHostUrl() + "/Login/Login";
+        $.post(url, {
             work_number: work_number,
             password: sha1(password)
         }, function (data, status) {

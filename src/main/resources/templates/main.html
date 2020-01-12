@@ -8,12 +8,12 @@
 
 <h1 align="center">首页</h1>
 </body>
+<script src="js/webProperties.js"></script>
 <script>
     window.onload = function () {
         const user = sessionStorage.getItem("User");
         if (user === null) {
-            //window.location.href = "http://47.101.209.223/QBank";
-            window.location.href = "http://localhost";
+            window.location.href = getHostUrl();
         } else {
             alert("User" + user);
         }
