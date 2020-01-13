@@ -90,7 +90,7 @@ public class MvcDataDto implements MyObj {
         JSONObject object = new JSONObject();
         object.put("resultCode", resultCode);
         object.put("resultMessage", resultMessage);
-        object.put("resultObj", resultObj.toJson());
+        object.put("resultObj", resultObj == null ? null : resultObj.toJson());
         object.put("redirectUrl", redirectUrl);
         return object;
     }
