@@ -21,29 +21,29 @@
 
     <link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
     <!-- Animate.css -->
-    <link type="text/css" rel="stylesheet" href="css/animate.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/animate.css">
     <!-- Icomoon Icon Fonts-->
-    <link type="text/css" rel="stylesheet" href="css/icomoon.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/icomoon.css">
     <!-- Themify Icons-->
-    <link type="text/css" rel="stylesheet" href="css/themify-icons.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/themify-icons.css">
     <!-- Bootstrap  -->
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/bootstrap.css">
 
     <!-- Magnific Popup -->
-    <link type="text/css" rel="stylesheet" href="css/magnific-popup.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/magnific-popup.css">
 
     <!-- Owl Carousel  -->
-    <link type="text/css" rel="stylesheet" href="css/owl.carousel.min.css">
-    <link type="text/css" rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/owl.carousel.min.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/owl.theme.default.min.css">
 
     <!-- Theme style  -->
-    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link type="text/css" rel="stylesheet" href="/QBank/css/style.css">
 
     <!-- Modernizr JS -->
-    <script type="text/javascript" src="js/modernizr-2.6.2.min.js"></script>
+    <script type="text/javascript" src="/QBank/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="/QBank/js/respond.min.js"></script>
     <![endif]-->
 
 </head>
@@ -62,7 +62,7 @@
 
                 <div class="row">
                     <div class="col-sm-4 col-xs-12">
-                        <div id="gtco-logo"><a href="../src/main/resources/templates/index.html">QBank <em>.</em></a>
+                        <div id="gtco-logo"><a href="/QBank/main">QBank <em>.</em></a>
                         </div>
                     </div>
                     <div class="col-xs-8 text-right menu-1">
@@ -80,7 +80,7 @@
 
         <!--欢迎使用最便捷的命题系统-->
         <header id="gtco-header" class="gtco-cover gtco-cover-sm" role="banner"
-                style="background-image: url(images/bg_home.jpg)">
+                style="background-image: url(/QBank/images/bg_home.jpg)">
             <div class="overlay"></div>
             <div class="gtco-container">
                 <div class="row">
@@ -177,32 +177,30 @@
 </div>
 
 <!-- jQuery -->
-<script src="js/jquery-3.4.1.min.js"></script>
+<script src="/QBank/js/jquery-3.4.1.min.js"></script>
 <!-- jQuery Easing -->
-<script src="js/jquery.easing.1.3.js"></script>
+<script src="/QBank/js/jquery.easing.1.3.js"></script>
 <!-- Bootstrap -->
-<script src="js/bootstrap.min.js"></script>
+<script src="/QBank/js/bootstrap.min.js"></script>
 <!-- Waypoints -->
-<script src="js/jquery.waypoints.min.js"></script>
+<script src="/QBank/js/jquery.waypoints.min.js"></script>
 <!-- Carousel -->
-<script src="js/owl.carousel.min.js"></script>
+<script src="/QBank/js/owl.carousel.min.js"></script>
 <!-- countTo -->
-<script src="js/jquery.countTo.js"></script>
+<script src="/QBank/js/jquery.countTo.js"></script>
 <!-- Magnific Popup -->
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="js/magnific-popup-options.js"></script>
+<script src="/QBank/js/jquery.magnific-popup.min.js"></script>
+<script src="/QBank/js/magnific-popup-options.js"></script>
 <!-- Main -->
-<script src="js/main.js"></script>
+<script src="/QBank/js/main.js"></script>
 <!--SHA1加密-->
-<script src="js/SHA1.js"></script>
-<!--加载web配置文件-->
-<script src="js/qbank.js"></script>
+<script src="/QBank/js/SHA1.js"></script>
 <!--登录响应-->
 <script>
     window.onload = function () {
         const user = sessionStorage.getItem("QbankUser");
         if (user !== null) {
-            window.location.href = getHostUrl() + "/main";
+            window.location.href = "/QBank/main";
         }
     };
 
@@ -214,7 +212,7 @@
         } else if (password === null) {
             alert("请输入完整的密码")
         } else {
-            const url = getHostUrl() + "/login/login";
+            const url = "/QBank/login/login";
             const data = {"user_work_number": work_number, "user_password": sha1(password)};
             $.ajax({
                 url: url,
@@ -227,7 +225,7 @@
                     if ("success" === data["resultCode"]) {
                         //TODO 加密
                         sessionStorage.setItem("QbankUser", JSON.stringify(data["resultObj"]));
-                        window.location.href = getHostUrl() + data["redirectUrl"];
+                        window.location.href = data["redirectUrl"];
                     }
                 }
             });

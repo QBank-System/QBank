@@ -31,21 +31,26 @@ public class LoginControl {
         return "login";
     }
 
+    @RequestMapping("/register")
+    public String register() {
+        return "register";
+    }
+
     @RequestMapping("/login")
     @ResponseBody
     public JSONObject login(@RequestParam("user_work_number") String userWorkNumber, @RequestParam("user_password") String userPassword) throws Exception {
         MvcDataDto data = getUserService().login(userWorkNumber, userPassword);
         if (MvcDataDto.SUCCESS.equals(data.getResultCode())) {
-            data.setRedirectUrl("/main");
+            data.setRedirectUrl("/QBank/main");
         }
         return data.toJson();
     }
 
-    @RequestMapping("/register")
+    @RequestMapping("/register_user")
     @ResponseBody
-    public JSONObject register(@RequestParam("user_name") String userName, @RequestParam("user_work_number") String userWorkNumber,
-                               @RequestParam("user_password") String userPassword, @RequestParam("user_college") String userCollege,
-                               @RequestParam("user_phone_number") String userPhoneNumber) throws Exception {
+    public JSONObject registerUser(@RequestParam("user_name") String userName, @RequestParam("user_work_number") String userWorkNumber,
+                                   @RequestParam("user_password") String userPassword, @RequestParam("user_college") String userCollege,
+                                   @RequestParam("user_phone_number") String userPhoneNumber) throws Exception {
         User user = new User();
         user.setUserName(userName);
         user.setUserWorkNumber(userWorkNumber);
@@ -55,11 +60,11 @@ public class LoginControl {
         return getUserService().register(user).toJson();
     }
 
-    @RequestMapping("/batch_register")
+    @RequestMapping("/batch_register_user")
     @ResponseBody
-    public JSONObject batchRegister(@RequestParam("user_name") String[] userNames, @RequestParam("user_work_number") String[] userWorkNumbers,
-                                    @RequestParam("user_password") String[] userPasswords, @RequestParam("user_college") String[] userColleges,
-                                    @RequestParam("user_phone_number") String[] userPhoneNumbers) throws Exception {
+    public JSONObject batchRegisterUser(@RequestParam("user_name") String[] userNames, @RequestParam("user_work_number") String[] userWorkNumbers,
+                                        @RequestParam("user_password") String[] userPasswords, @RequestParam("user_college") String[] userColleges,
+                                        @RequestParam("user_phone_number") String[] userPhoneNumbers) throws Exception {
         List<User> list = new LinkedList<>();
         for (int i = 0; i < userNames.length; i++) {
             User user = new User();
