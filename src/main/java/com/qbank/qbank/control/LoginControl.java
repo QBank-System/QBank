@@ -26,23 +26,6 @@ import static com.qbank.qbank.service.impl.UserServiceImpl.getUserService;
 @RequestMapping("/login")
 public class LoginControl {
 
-    private static String homeUrl;
-
-    static {
-        Properties properties = new Properties();
-        InputStream is = DatabaseOperations.class.getClassLoader().getResourceAsStream("application.properties");
-        try {
-            if (is != null) {
-                properties.load(is);
-                homeUrl = properties.getProperty("homeUrl");
-            } else {
-                homeUrl = "http://localhost";
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
     @RequestMapping("/index")
     public String index() {
         return "login";
@@ -53,7 +36,7 @@ public class LoginControl {
     public JSONObject login(@RequestParam("user_work_number") String userWorkNumber, @RequestParam("user_password") String userPassword) throws Exception {
         MvcDataDto data = getUserService().login(userWorkNumber, userPassword);
         if (MvcDataDto.SUCCESS.equals(data.getResultCode())) {
-            data.setRedirectUrl(homeUrl + "/main");
+            data.setRedirectUrl("/main");
         }
         return data.toJson();
     }
