@@ -21,29 +21,29 @@
 
     <link type="text/css" href="https://fonts.googleapis.com/css?family=Roboto:300,400,700" rel="stylesheet">
     <!-- Animate.css -->
-    <link type="text/css" rel="stylesheet" href="css/animate.css">
+    <link type="text/css" rel="stylesheet" href="/css/animate.css">
     <!-- Icomoon Icon Fonts-->
-    <link type="text/css" rel="stylesheet" href="css/icomoon.css">
+    <link type="text/css" rel="stylesheet" href="/css/icomoon.css">
     <!-- Themify Icons-->
-    <link type="text/css" rel="stylesheet" href="css/themify-icons.css">
+    <link type="text/css" rel="stylesheet" href="/css/themify-icons.css">
     <!-- Bootstrap  -->
-    <link type="text/css" rel="stylesheet" href="css/bootstrap.css">
+    <link type="text/css" rel="stylesheet" href="/css/bootstrap.css">
 
     <!-- Magnific Popup -->
-    <link type="text/css" rel="stylesheet" href="css/magnific-popup.css">
+    <link type="text/css" rel="stylesheet" href="/css/magnific-popup.css">
 
     <!-- Owl Carousel  -->
-    <link type="text/css" rel="stylesheet" href="css/owl.carousel.min.css">
-    <link type="text/css" rel="stylesheet" href="css/owl.theme.default.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/owl.carousel.min.css">
+    <link type="text/css" rel="stylesheet" href="/css/owl.theme.default.min.css">
 
     <!-- Theme style  -->
-    <link type="text/css" rel="stylesheet" href="css/style.css">
+    <link type="text/css" rel="stylesheet" href="/css/style.css">
 
     <!-- Modernizr JS -->
-    <script type="text/javascript" src="js/modernizr-2.6.2.min.js"></script>
+    <script type="text/javascript" src="/js/modernizr-2.6.2.min.js"></script>
     <!-- FOR IE9 below -->
     <!--[if lt IE 9]>
-    <script type="text/javascript" src="js/respond.min.js"></script>
+    <script type="text/javascript" src="/js/respond.min.js"></script>
     <![endif]-->
 
 </head>
@@ -109,16 +109,16 @@
                             <form action="#">
                                 <div class="row form-group">
                                     <div class="col-md-12">
-                                        <label class="sr-only" for="work_number">Work_Number</label>
-                                        <input type="text" id="work_number" class="form-control" placeholder="请输入您的职工号">
+                                        <label class="sr-only" for="user_work_number">Work_Number</label>
+                                        <input type="text" id="user_work_number" class="form-control" placeholder="请输入您的职工号">
                                     </div>
 
                                 </div>
 
                                 <div class="row form-group">
                                     <div class="col-md-12">
-                                        <label class="sr-only" for="password">Password</label>
-                                        <input type="text" id="password" class="form-control" placeholder="请输入您的密码">
+                                        <label class="sr-only" for="user_password">Password</label>
+                                        <input type="text" id="user_password" class="form-control" placeholder="请输入您的密码">
                                     </div>
                                 </div>
 
@@ -175,46 +175,47 @@
 </div>
 
 <!-- jQuery -->
-<script src="js/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <!-- jQuery Easing -->
-<script src="js/jquery.easing.1.3.js"></script>
+<script src="/js/jquery.easing.1.3.js"></script>
 <!-- Bootstrap -->
-<script src="js/bootstrap.min.js"></script>
+<script src="/js/bootstrap.min.js"></script>
 <!-- Waypoints -->
-<script src="js/jquery.waypoints.min.js"></script>
+<script src="/js/jquery.waypoints.min.js"></script>
 <!-- Carousel -->
-<script src="js/owl.carousel.min.js"></script>
+<script src="/js/owl.carousel.min.js"></script>
 <!-- countTo -->
-<script src="js/jquery.countTo.js"></script>
+<script src="/js/jquery.countTo.js"></script>
 <!-- Magnific Popup -->
-<script src="js/jquery.magnific-popup.min.js"></script>
-<script src="js/magnific-popup-options.js"></script>
+<script src="/js/jquery.magnific-popup.min.js"></script>
+<script src="/js/magnific-popup-options.js"></script>
 <!-- Main -->
-<script src="js/main.js"></script>
+<script src="/js/main.js"></script>
 <!--SHA1加密-->
-<script src="js/SHA1.js"></script>
+<script src="/js/SHA1.js"></script>
 <!--加载web配置文件-->
-<script src="js/webProperties.js"></script>
+<script src="/js/qbank.js"></script>
 <!--登录响应-->
 <script>
     window.onload = function () {
-        const user = sessionStorage.getItem("User");
+        const user = sessionStorage.getItem("QbankUser");
         if (user !== null) {
             window.location.href = getHostUrl()+"/Main";
         }
     }
 
     function init() {
-        const work_number = document.getElementById("work_number").value;
-        const password = document.getElementById("password").value;
-        const url = getHostUrl() + "/Login/Login";
+        const work_number = document.getElementById("user_work_number").value;
+        const password = document.getElementById("user_password").value;
+        const url = getHostUrl() + "/login/login";
         $.post(url, {
-            work_number: work_number,
-            password: sha1(password)
+            user_work_number: work_number,
+            user_password: sha1(password)
         }, function (data, status) {
             alert(data["resultMessage"]);
             if ("success" === data["resultCode"]) {
-                sessionStorage.setItem("User", JSON.stringify(data["resultObj"]));
+                //TODO 加密
+                sessionStorage.setItem("QbankUser",JSON.stringify(data["resultObj"]));
                 window.location.href = data["redirectUrl"];
             }
         });

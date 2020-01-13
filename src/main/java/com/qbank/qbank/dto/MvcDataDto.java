@@ -21,6 +21,10 @@ public class MvcDataDto implements MyObj {
      */
     public static final String ERROR = "error";
     /**
+     * 其它
+     */
+    public static final String OTHER = "other";
+    /**
      * 返回代码
      */
     private String resultCode;
@@ -32,6 +36,10 @@ public class MvcDataDto implements MyObj {
      * 返回数据对象(自定义)
      */
     private MyObj resultObj;
+    /**
+     * 返回数据对象组(自定义)
+     */
+    private MyObj[] resultObjs;
     /**
      * 返回后跳转页面
      */
@@ -59,6 +67,14 @@ public class MvcDataDto implements MyObj {
 
     public void setResultObj(MyObj resultObj) {
         this.resultObj = resultObj;
+    }
+
+    public MyObj[] getResultObjs() {
+        return resultObjs;
+    }
+
+    public void setResultObjs(MyObj[] resultObjs) {
+        this.resultObjs = resultObjs;
     }
 
     public String getRedirectUrl() {

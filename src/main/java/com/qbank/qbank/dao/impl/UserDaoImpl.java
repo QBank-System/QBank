@@ -58,10 +58,11 @@ public class UserDaoImpl implements IUserDao {
     }
 
     @Override
-    public int addUsers(List<User> users) throws SQLException {
-        int result = 0;
+    public int[] addUsers(List<User> users) throws SQLException {
+        int[] result = new int[users.size()];
+        int i = 0;
         for (User user : users) {
-            result += addUser(user);
+            result[i++] = addUser(user);
         }
         return result;
     }
@@ -70,7 +71,7 @@ public class UserDaoImpl implements IUserDao {
     public int delUser(String index, int indexClass) throws SQLException {
         Object[] objects = new Object[1];
         objects[0] = index;
-        int result = 0;
+        int result;
         switch (indexClass) {
             case CLASS_USERID:
                 sql = "delete from user where user.id=?;";
@@ -90,18 +91,18 @@ public class UserDaoImpl implements IUserDao {
         pstm = conn.prepareStatement(sql);
         rs = pstm.executeQuery();
         rs.next();
-        int AUTO_INCREMENT = rs.getInt(1);
-        sql = "alter table qbank.user auto_increment=" + AUTO_INCREMENT + ";";
+        int autoIncrement = rs.getInt(1);
+        sql = "alter table qbank.user auto_increment=" + autoIncrement + ";";
         pstm = conn.prepareStatement(sql);
         pstm.executeUpdate();
         return result;
     }
 
     @Override
-    public int delUsers(String[] index, int[] indexClass) throws SQLException {
-        int result = 0;
+    public int[] delUsers(String[] index, int[] indexClass) throws SQLException {
+        int[] result = new int[index.length];
         for (int i = 0; i < index.length; i++) {
-            result += delUser(index[i], indexClass[i]);
+            result[i] = delUser(index[i], indexClass[i]);
         }
         return result;
     }
@@ -129,10 +130,11 @@ public class UserDaoImpl implements IUserDao {
     }
 
     @Override
-    public int updateUsers(List<User> users) throws SQLException {
-        int result = 0;
+    public int[] updateUsers(List<User> users) throws SQLException {
+        int[] result = new int[users.size()];
+        int i = 0;
         for (User user : users) {
-            result += updateUser(user);
+            result[i++] = updateUser(user);
         }
         return result;
     }

@@ -2,7 +2,7 @@ package com.qbank.qbank.control;
 
 import com.alibaba.fastjson.JSONObject;
 import com.qbank.qbank.dto.MvcDataDto;
-import com.qbank.qbank.service.impl.UserServiceImpl;
+import com.qbank.qbank.entity.User;
 import com.qbank.qbank.utils.DatabaseOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +11,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Properties;
+
+import static com.qbank.qbank.service.impl.UserServiceImpl.getUserService;
 
 
 /**
@@ -19,37 +23,71 @@ import java.util.Properties;
  * @date 2020/1/11 19:10
  */
 @Controller
-@RequestMapping("/Login")
+@RequestMapping("/login")
 public class LoginControl {
 
-    private UserServiceImpl userService = new UserServiceImpl();
-    private static String homeUrl = "http://localhost";
+    private static String homeUrl;
 
     static {
         Properties properties = new Properties();
         InputStream is = DatabaseOperations.class.getClassLoader().getResourceAsStream("application.properties");
         try {
-            properties.load(is);
+            if (is != null) {
+                properties.load(is);
+                homeUrl = properties.getProperty("homeUrl");
+            } else {
+                homeUrl = "http://localhost";
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        homeUrl = properties.getProperty("homeUrl");
     }
 
-
-    @RequestMapping("/Index")
+    @RequestMapping("/index")
     public String index() {
         return "login";
     }
 
-    @RequestMapping("/Login")
+    @RequestMapping("/login")
     @ResponseBody
-    public JSONObject login(@RequestParam("work_number") String work_number, @RequestParam("password") String password) throws Exception {
-        MvcDataDto data = userService.login(work_number, password);
+    public JSONObject login(@RequestParam("user_work_number") String userWorkNumber, @RequestParam("user_password") String userPassword) throws Exception {
+        MvcDataDto data = getUserService().login(userWorkNumber, userPassword);
         if (MvcDataDto.SUCCESS.equals(data.getResultCode())) {
-            data.setRedirectUrl(homeUrl + "/Main");
+            data.setRedirectUrl(homeUrl + "/main");
         }
         return data.toJson();
+    }
+
+    @RequestMapping("/register")
+    @ResponseBody
+    public JSONObject register(@RequestParam("user_name") String userName, @RequestParam("user_work_number") String userWorkNumber,
+                               @RequestParam("user_password") String userPassword, @RequestParam("user_college") String userCollege,
+                               @RequestParam("user_phone_number") String userPhoneNumber) throws Exception {
+        User user = new User();
+        user.setUserName(userName);
+        user.setUserWorkNumber(userWorkNumber);
+        user.setUserPassword(userPassword);
+        user.setUserCollege(userCollege);
+        user.setUserPhoneNumber(userPhoneNumber);
+        return getUserService().register(user).toJson();
+    }
+
+    @RequestMapping("/batch_register")
+    @ResponseBody
+    public JSONObject batchRegister(@RequestParam("user_name") String[] userNames, @RequestParam("user_work_number") String[] userWorkNumbers,
+                                    @RequestParam("user_password") String[] userPasswords, @RequestParam("user_college") String[] userColleges,
+                                    @RequestParam("user_phone_number") String[] userPhoneNumbers) throws Exception {
+        List<User> list = new LinkedList<>();
+        for (int i = 0; i < userNames.length; i++) {
+            User user = new User();
+            user.setUserName(userNames[i]);
+            user.setUserWorkNumber(userWorkNumbers[i]);
+            user.setUserPassword(userPasswords[i]);
+            user.setUserCollege(userColleges[i]);
+            user.setUserPhoneNumber(userPhoneNumbers[i]);
+            list.add(user);
+        }
+        return getUserService().batchRegister(list).toJson();
     }
 
 }

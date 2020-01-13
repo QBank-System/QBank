@@ -8,10 +8,10 @@
 
 <h1 align="center">首页</h1>
 </body>
-<script src="js/webProperties.js"></script>
+<script src="/js/qbank.js"></script>
 <script>
     window.onload = function () {
-        const user = sessionStorage.getItem("User");
+        const user = sessionStorage.getItem("QbankUser");
         if (user === null) {
             window.location.href = getHostUrl();
         } else {

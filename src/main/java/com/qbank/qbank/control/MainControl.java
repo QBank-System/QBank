@@ -15,14 +15,9 @@ public class MainControl {
         return new LoginControl().index();
     }
 
-    @RequestMapping("/Main")
+    @RequestMapping("/main")
     public String main() {
         return "main";
     }
-
-//    @RequestMapping("/404")
-//    public String No() {
-//        return "404";
-//    }
 
 }

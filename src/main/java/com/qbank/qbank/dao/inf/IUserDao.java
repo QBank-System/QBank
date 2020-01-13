@@ -1,5 +1,6 @@
 package com.qbank.qbank.dao.inf;
 
+import com.qbank.qbank.dao.impl.UserDaoImpl;
 import com.qbank.qbank.entity.User;
 
 import java.sql.SQLException;
@@ -32,7 +33,7 @@ public interface IUserDao {
      * @return 影响行数
      * @throws SQLException SQLException
      */
-    int addUsers(List<User> users) throws SQLException;
+    int[] addUsers(List<User> users) throws SQLException;
 
     //删
 
@@ -54,7 +55,7 @@ public interface IUserDao {
      * @return 影响行数
      * @throws SQLException SQLException
      */
-    int delUsers(String[] index, int[] indexClass) throws SQLException;
+    int[] delUsers(String[] index, int[] indexClass) throws SQLException;
 
     //改
 
@@ -74,7 +75,7 @@ public interface IUserDao {
      * @return 影响行数
      * @throws SQLException SQLException
      */
-    int updateUsers(List<User> users) throws SQLException;
+    int[] updateUsers(List<User> users) throws SQLException;
 
     //查
 
