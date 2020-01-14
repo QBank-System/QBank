@@ -1,18 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <style>
-        div{
-            width: 800px;
-            height: 800px;
-            margin: 0 auto;
-            background: url("images/error404.png") no-repeat;
-            overflow: hidden;
-            background-size:cover;
-        }
-    </style>
+    <link type="text/css" rel="stylesheet" th:href="@{/css/error404.css}" href="../static/css/error404.css">
 </head>
 <body>
 <div onclick="goHome()">
