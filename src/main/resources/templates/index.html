@@ -2,20 +2,19 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>主页面</title>
+    <title>Title</title>
 </head>
 <body>
 
-<h1 align="center">首页</h1>
 </body>
 <script>
     window.onload = function () {
         const user = sessionStorage.getItem("QbankUser");
-        if (user === null) {
+        if (user !== null) {
+            window.location.href = "/QBank/main";
+        }else{
             window.location.href = "/QBank/login/index";
-        } else {
-            alert("User" + user);
         }
-    }
+    };
 </script>
 </html>

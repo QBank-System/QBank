@@ -12,7 +12,7 @@ public class MainControl {
 
     @RequestMapping("")
     public String index() {
-        return new LoginControl().index();
+        return "index";
     }
 
     @RequestMapping("/main")
