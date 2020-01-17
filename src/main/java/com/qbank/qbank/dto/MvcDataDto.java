@@ -1,13 +1,15 @@
 package com.qbank.qbank.dto;
 
 import com.alibaba.fastjson.JSONObject;
-import com.qbank.qbank.entity.MyObj;
+
+import java.util.List;
+import java.util.Objects;
 
 /**
  * @author 王宇杰
  * @date 2020/1/9 14:46
  */
-public class MvcDataDto implements MyObj {
+public class MvcDataDto {
     /**
      * 成功
      */
@@ -35,11 +37,7 @@ public class MvcDataDto implements MyObj {
     /**
      * 返回数据对象(自定义)
      */
-    private MyObj resultObj;
-    /**
-     * 返回数据对象组(自定义)
-     */
-    private MyObj[] resultObjs;
+    private Object resultObj;
     /**
      * 返回后跳转页面
      */
@@ -61,20 +59,12 @@ public class MvcDataDto implements MyObj {
         this.resultMessage = resultMessage;
     }
 
-    public MyObj getResultObj() {
+    public Object getResultObj() {
         return resultObj;
     }
 
-    public void setResultObj(MyObj resultObj) {
+    public void setResultObj(Object resultObj) {
         this.resultObj = resultObj;
-    }
-
-    public MyObj[] getResultObjs() {
-        return resultObjs;
-    }
-
-    public void setResultObjs(MyObj[] resultObjs) {
-        this.resultObjs = resultObjs;
     }
 
     public String getRedirectUrl() {
@@ -86,12 +76,28 @@ public class MvcDataDto implements MyObj {
     }
 
     @Override
-    public JSONObject toJson() {
+    public String toString() {
         JSONObject object = new JSONObject();
         object.put("resultCode", resultCode);
         object.put("resultMessage", resultMessage);
-        object.put("resultObj", resultObj == null ? null : resultObj.toJson());
+        object.put("resultObj", resultObj == null ? null : resultObj.toString());
         object.put("redirectUrl", redirectUrl);
-        return object;
+        return object.toString();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MvcDataDto that = (MvcDataDto) o;
+        return resultCode.equals(that.resultCode) &&
+                resultMessage.equals(that.resultMessage) &&
+                resultObj.equals(that.resultObj) &&
+                redirectUrl.equals(that.redirectUrl);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(resultCode, resultMessage, resultObj, redirectUrl);
     }
 }

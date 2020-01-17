@@ -1,0 +1,20 @@
+body{
+    font-family: "Roboto", Arial, sans-serif;
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.7;
+    color: #777;
+    background: #ececec;
+}
+#myHeader{
+    background-color: #F54C53;
+}
+#QBankLogo{
+    color: white;
+}
+
+#page .page-inner{
+    bottom: 5px;
+    left: 0;
+}
+#f54c53

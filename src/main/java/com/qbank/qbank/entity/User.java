@@ -6,7 +6,11 @@ import com.alibaba.fastjson.JSONObject;
  * @author 王宇杰
  * @date 2020/1/9 12:22
  */
-public class User implements MyObj {
+public class User {
+
+    public static final String NORMAL = "2";
+    public static final String ADMIN = "1";
+    public static final String SUPERADMIN = "0";
 
     /**
      * id
@@ -196,7 +200,7 @@ public class User implements MyObj {
     }
 
     @Override
-    public JSONObject toJson() {
+    public String toString() {
         JSONObject object = new JSONObject();
         object.put("userId", userId);
         object.put("userCase", userCase);
@@ -211,6 +215,6 @@ public class User implements MyObj {
         object.put("userOffice", userOffice);
         object.put("userGrade", userGrade);
         object.put("userTime", userTime);
-        return object;
+        return object.toString();
     }
 }

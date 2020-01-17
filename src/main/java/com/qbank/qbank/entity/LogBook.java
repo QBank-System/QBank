@@ -7,7 +7,7 @@ import com.alibaba.fastjson.JSONObject;
  * @author 王宇杰
  * @date 2020/1/9 12:44
  */
-public class LogBook implements MyObj {
+public class LogBook {
 
     /**
      * id
@@ -91,7 +91,7 @@ public class LogBook implements MyObj {
     }
 
     @Override
-    public JSONObject toJson() {
+    public String toString() {
         //TODO ToJson
         return null;
     }

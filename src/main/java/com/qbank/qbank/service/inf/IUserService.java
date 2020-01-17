@@ -15,10 +15,11 @@ public interface IUserService {
      *
      * @param workNumber 学工号
      * @param password   密码
+     * @param indexClass 索引类别(1:userId;2:userWorkNumber;3:userName)
      * @return MvcDataDto
      * @throws Exception Exception
      */
-    MvcDataDto login(String workNumber, String password) throws Exception;
+    MvcDataDto login(String workNumber, String password, int indexClass) throws Exception;
 
     /**
      * 用户注册
@@ -48,4 +49,11 @@ public interface IUserService {
      */
     MvcDataDto uploadCase(String userId, String imgByBase64) throws Exception;
 
+    /**
+     * 获取用户列表
+     *
+     * @return UserList
+     * @throws Exception e
+     */
+    MvcDataDto getUserList(int userCount,int index) throws Exception;
 }

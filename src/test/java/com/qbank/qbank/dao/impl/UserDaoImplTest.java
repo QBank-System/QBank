@@ -154,9 +154,11 @@ class UserDaoImplTest {
 
     @Test
     void getUsers() throws SQLException {
-        List<User> list = getUserDao().getUsers("1");
+        List<User> list = getUserDao().getUsers("");
         for (User user : list) {
             System.out.println(user.getUserName());
         }
     }
+
+
 }

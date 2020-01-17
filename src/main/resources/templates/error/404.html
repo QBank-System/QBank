@@ -1,18 +1,26 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link type="text/css" rel="stylesheet" th:href="@{/css/error404.css}" href="../static/css/error404.css">
+    <style>
+        div{
+            width: 800px;
+            height: 800px;
+            margin: 0 auto;
+            background: url("/QBank/static/images/error404.png") no-repeat;
+            overflow: hidden;
+            background-size:cover;
+        }
+    </style>
 </head>
 <body>
 <div onclick="goHome()">
 </div>
 </body>
-<script src="../js/qbank.js"></script>
 <script>
     function goHome() {
-        window.location.href = "/";
+        window.location.href = "/QBank/main";
     }
 </script>
 </html>

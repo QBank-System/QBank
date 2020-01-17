@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="../static/css/layui.css">
+
+</head>
+<body>
+<table class="layui-table">
+    <thead>
+    <tr>
+        <th style="width: 30px"><input type="checkbox" name="vehicle" value="Car"/></th>
+        <th>学工号</th>
+        <th>姓名</th>
+        <th>职称</th>
+        <th>所属学院</th>
+        <th>专业领域</th>
+        <th>电话号码</th>
+    </tr>
+    </thead>
+    <tbody id="result">
+    </tbody>
+</table>
+<div style="float: right" id="demo2-1"></div>
+<script src="../static/js/jquery-3.4.1.min.js"></script>
+<script src="../static/js/layui.js" charset="utf-8"></script>
+<script>
+    window.onload = function () {
+        initList(page_number);
+    };
+
+    var user_count = 0;
+    var page_number = 1;
+    var count_a_page = 0;
+    var page_count = 0;
+
+    function initList(index) {
+        const url = "/QBank/user/list";
+        const data = {"user_count": user_count, "index": index};
+        $.ajax({
+            url: url,
+            dataType: "json",
+            async: true,
+            data: data,
+            type: "GET",
+            success: function (data) {
+                if ("success" === data["resultCode"]) {
+                    document.getElementById("result").innerHTML = "";
+                    const result = data["resultObj"];
+                    user_count = result["user_count"];
+                    page_number = result["page_number"];
+                    count_a_page = result["count_a_page"];
+                    page_count = result["page_count"];
+                    initPage();
+                    for (var i = (page_number - 1) * count_a_page; (i < (page_number * count_a_page)) && (i < user_count); i++) {
+                        const user = result["user" + i];
+                        document.getElementById("result").innerHTML +=
+                            "<tr><td><input type='checkbox' value='" + user["userId"] + "'/></td><td>" + user["userWorkNumber"]
+                            + "</td><td>" + user["userName"] + "</td><td>" + user["userTitle"] + "</td><td>" + user["userCollege"]
+                            + "</td><td>" + user["userProfessionalField"] + "</td><td>" + user["userPhoneNumber"] + "</td></tr>";
+                    }
+                } else {
+                    alert("查询失败，请刷新重试!")
+                }
+            }
+        });
+    }
+
+    function initPage() {
+        layui.use(['laypage', 'layer'], function () {
+            var laypage = layui.laypage
+                , layer = layui.layer;
+
+            laypage.render({
+                elem: 'demo2-1'
+                , count: page_count * 10
+                , theme: '#F54C53'
+                , curr: page_number
+                , jump: function (obj, first) {
+                    if (!first) {
+                        initList(obj.curr);
+                    }
+                }
+            });
+
+        });
+    }
+
+
+</script>
+</body>
+</html>
