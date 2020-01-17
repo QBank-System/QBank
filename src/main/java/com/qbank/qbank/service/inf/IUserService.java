@@ -52,8 +52,19 @@ public interface IUserService {
     /**
      * 获取用户列表
      *
+     * @param page  页数
+     * @param limit 每页条数
      * @return UserList
      * @throws Exception e
      */
-    MvcDataDto getUserList(int userCount,int index) throws Exception;
+    MvcDataDto getUserList(int page, int limit) throws Exception;
+
+
+    /**
+     * 获取全部用户列表
+     *
+     * @return UserList
+     * @throws Exception e
+     */
+    List<User> getAllUserList() throws Exception;
 }

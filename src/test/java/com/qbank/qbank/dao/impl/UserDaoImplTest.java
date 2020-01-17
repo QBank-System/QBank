@@ -22,25 +22,10 @@ class UserDaoImplTest {
 
     @Test
     void logicTest() throws SQLException, InterruptedException {
-        System.out.println("addUser");
-        Thread.sleep(500);
-        addUser();
-        System.out.println("delUser");
-        Thread.sleep(500);
-        delUser();
-        System.out.println("addUsers");
-        Thread.sleep(500);
-        addUsers();
-        System.out.println("delUsers");
-        Thread.sleep(500);
-        delUsers();
-        System.out.println("addUser");
-        Thread.sleep(500);
-        addUser();
-        System.out.println("updateUser");
-        Thread.sleep(500);
-        updateUser();
-        System.out.println("end");
+        for (int i = 0; i < 100; i++) {
+            addUser();
+        }
+
     }
 
     @BeforeEach

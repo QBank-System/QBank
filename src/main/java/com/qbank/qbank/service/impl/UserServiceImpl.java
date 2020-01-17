@@ -1,5 +1,6 @@
 package com.qbank.qbank.service.impl;
 
+import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.qbank.qbank.dao.inf.IUserDao;
 import com.qbank.qbank.dto.MvcDataDto;
@@ -141,24 +142,22 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public MvcDataDto getUserList(int userCount, int index) throws Exception {
+    public MvcDataDto getUserList(int page, int limit) throws Exception {
         MvcDataDto returnData = new MvcDataDto();
-        JSONObject resultData = new JSONObject();
+        JSONArray result = new JSONArray();
         List<User> list = getUserDao().getUsers("");
-        int pageCount = (list.size() - 1) / COUNT_A_PAGE + 1;
-        resultData.put("user_count", list.size());
-        resultData.put("page_count", pageCount);
-        resultData.put("count_a_page", COUNT_A_PAGE);
-        resultData.put("page_number", index);
-        for (int i = (index - 1) * COUNT_A_PAGE; (i < (index * COUNT_A_PAGE))&&(i<list.size()); i++) {
-            resultData.put("user" + i, list.get(i));
+        for (int i = (page - 1) * limit; (i < (page * limit)) && (i < list.size()); i++) {
+            result.add(list.get(i));
         }
         returnData.setResultCode(MvcDataDto.SUCCESS);
-        returnData.setResultMessage("查询成功");
-        returnData.setResultObj(resultData);
+        returnData.setResultMessage(""+list.size());
+        returnData.setResultObj(result);
         return returnData;
     }
 
-
+    @Override
+    public List<User> getAllUserList() throws Exception {
+        return getUserDao().getUsers("");
+    }
 
 }

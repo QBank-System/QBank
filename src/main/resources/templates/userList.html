@@ -1,93 +1,113 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-    <link rel="stylesheet" href="../static/css/layui.css">
-
+    <meta charset="utf-8">
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link rel="stylesheet" href="../static/frame/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
+    <style>
+        .demoTable .layui-btn{
+            background-color: #F54C53;
+        }
+        .layui-laypage>.layui-laypage-curr>.layui-laypage-em{
+            background-color: #F54C53;
+        }
+        .layui-table-cell .layui-btn{
+            background-color: #F54C53;
+        }
+        .layui-table-cell .layui-btn-danger{
+            background-color: #1890FF;
+        }
+    </style>
 </head>
 <body>
-<table class="layui-table">
-    <thead>
-    <tr>
-        <th style="width: 30px"><input type="checkbox" name="vehicle" value="Car"/></th>
-        <th>学工号</th>
-        <th>姓名</th>
-        <th>职称</th>
-        <th>所属学院</th>
-        <th>专业领域</th>
-        <th>电话号码</th>
-    </tr>
-    </thead>
-    <tbody id="result">
-    </tbody>
-</table>
-<div style="float: right" id="demo2-1"></div>
-<script src="../static/js/jquery-3.4.1.min.js"></script>
-<script src="../static/js/layui.js" charset="utf-8"></script>
+<div class="demoTable">
+    搜索ID：
+    <div class="layui-inline">
+        <input class="layui-input" name="id" id="demoReload" autocomplete="off">
+    </div>
+    <button class="layui-btn" data-type="reload">搜索</button>
+</div>
+
+<table class="layui-hide" id="LAY_table_user" lay-filter="user"></table>
+
+
+<script type="text/html" id="barDemo">
+    <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+    <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+</script>
+
+<script src="../static/frame/layui/layui.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    window.onload = function () {
-        initList(page_number);
-    };
+    layui.use('table', function () {
+        var table = layui.table;
+        //方法级渲染
+        table.render({
+            elem: '#LAY_table_user'
+            , url: '/QBank/user/list'
+            , cols: [
+                [
+                {checkbox: true, fixed: true}
+                , {field: 'userId',                 title: 'ID', width: 80, sort: true, fixed: true}
+                , {field: 'userWorkNumber',         title: '学工号', sort: true}
+                , {field: 'userName',               title: '姓名'}
+                , {field: 'userTitle',              title: '职称'}
+                , {field: 'userCollege',            title: '所属学院'}
+                , {field: 'userProfessionalField',  title: '专业领域'}
+                , {field: 'userPhoneNumber',        title: '电话号码'}
+                , {fixed: 'right', width: 178, align: 'center', toolbar: '#barDemo'}
+            ]
+            ]
+            , id: 'testReload'
+            , page: true
+        });
 
-    var user_count = 0;
-    var page_number = 1;
-    var count_a_page = 0;
-    var page_count = 0;
+        var $ = layui.$, active = {
+            reload: function(){
+                var demoReload = $('#demoReload');
 
-    function initList(index) {
-        const url = "/QBank/user/list";
-        const data = {"user_count": user_count, "index": index};
-        $.ajax({
-            url: url,
-            dataType: "json",
-            async: true,
-            data: data,
-            type: "GET",
-            success: function (data) {
-                if ("success" === data["resultCode"]) {
-                    document.getElementById("result").innerHTML = "";
-                    const result = data["resultObj"];
-                    user_count = result["user_count"];
-                    page_number = result["page_number"];
-                    count_a_page = result["count_a_page"];
-                    page_count = result["page_count"];
-                    initPage();
-                    for (var i = (page_number - 1) * count_a_page; (i < (page_number * count_a_page)) && (i < user_count); i++) {
-                        const user = result["user" + i];
-                        document.getElementById("result").innerHTML +=
-                            "<tr><td><input type='checkbox' value='" + user["userId"] + "'/></td><td>" + user["userWorkNumber"]
-                            + "</td><td>" + user["userName"] + "</td><td>" + user["userTitle"] + "</td><td>" + user["userCollege"]
-                            + "</td><td>" + user["userProfessionalField"] + "</td><td>" + user["userPhoneNumber"] + "</td></tr>";
+                //执行重载
+                table.reload('testReload', {
+                    page: {
+                        curr: 1 //重新从第 1 页开始
                     }
-                } else {
-                    alert("查询失败，请刷新重试!")
-                }
+                    ,where: {
+                        key: {
+                            id: demoReload.val()
+                        }
+                    }
+                }, 'data');
+            }
+        };
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+        //监听表格复选框选择
+        table.on('checkbox(user)', function (obj) {
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(user)', function (obj) {
+            var data = obj.data;
+            if (obj.event === 'detail') {
+                layer.msg('ID：' + data.id + ' 的查看操作');
+            } else if (obj.event === 'del') {
+                layer.confirm('真的删除行么', function (index) {
+                    obj.del();
+                    layer.close(index);
+                });
+            } else if (obj.event === 'edit') {
+                layer.alert('编辑行：<br>' + JSON.stringify(data))
             }
         });
-    }
-
-    function initPage() {
-        layui.use(['laypage', 'layer'], function () {
-            var laypage = layui.laypage
-                , layer = layui.layer;
-
-            laypage.render({
-                elem: 'demo2-1'
-                , count: page_count * 10
-                , theme: '#F54C53'
-                , curr: page_number
-                , jump: function (obj, first) {
-                    if (!first) {
-                        initList(obj.curr);
-                    }
-                }
-            });
-
-        });
-    }
 
 
+    });
 </script>
 </body>
 </html>

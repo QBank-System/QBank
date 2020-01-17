@@ -54,20 +54,21 @@
         userId = user["userId"];
         userPassword = user["userPassword"];
     }
-    const url = "/QBank/user/view?user_id="+userId+"&user_password="+userPassword;
+    const url1 = "/QBank/user/view?user_id="+userId+"&user_password="+userPassword;
+    const url2 = "/QBank/user/register?user_id="+userId+"&user_password="+userPassword;
     new Vue({
         el: '#myContent',
         data: {
-            viewUrl: url
+            viewUrl: url1
         }
     });
     
     function toRegister() {
-        $("#myContent").attr("src","/QBank/user/test");
+        $("#myContent").attr("src",url2);
     }
 
     function toUserList() {
-        $("#myContent").attr("src",url);
+        $("#myContent").attr("src",url1);
     }
 
 </script>
