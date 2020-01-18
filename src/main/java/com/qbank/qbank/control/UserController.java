@@ -5,11 +5,13 @@ import com.alibaba.fastjson.JSONObject;
 import com.qbank.qbank.dao.inf.IUserDao;
 import com.qbank.qbank.dto.MvcDataDto;
 import com.qbank.qbank.entity.User;
+import org.apache.commons.codec.digest.DigestUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static com.qbank.qbank.service.impl.UserServiceImpl.getUserService;
@@ -22,55 +24,65 @@ import static com.qbank.qbank.service.impl.UserServiceImpl.getUserService;
 @RequestMapping("/user")
 public class UserController {
 
-    @RequestMapping("/index")
-    public String index() {
-        return "error/noJurisdiction";
-    }
-
-    @RequestMapping("/userAdmin")
+    @RequestMapping("/userManagement")
     public String admin() {
-        return "userAdmin";
+        return "userManagement";
     }
 
-    @RequestMapping("/view")
+    @RequestMapping("/listView")
     public String getView(@RequestParam("user_id") String userId, @RequestParam("user_password") String userPassword) throws Exception {
         MvcDataDto data = getUserService().login(userId, userPassword, IUserDao.CLASS_USERID);
         //密码正确
-        if (data.getResultCode().equals(MvcDataDto.SUCCESS)) {
+        if (data.getCode()==MvcDataDto.SUCCESS) {
             return "userList";
         } else {
             return "error/noJurisdiction";
         }
     }
 
-    @RequestMapping("/register")
+    @RequestMapping("/registerView")
     public String register(@RequestParam("user_id") String userId, @RequestParam("user_password") String userPassword) throws Exception {
         MvcDataDto data = getUserService().login(userId, userPassword, IUserDao.CLASS_USERID);
         //密码正确
-        if (data.getResultCode().equals(MvcDataDto.SUCCESS)) {
+        if (data.getCode()==MvcDataDto.SUCCESS) {
             return "userRegister";
         } else {
             return "error/noJurisdiction";
         }
     }
 
-    @RequestMapping("/list")
+    @RequestMapping("/getList")
     @ResponseBody
     public Object getUserList(@RequestParam("page") int page, @RequestParam("limit") int limit) throws Exception {
-        MvcDataDto serviceData = getUserService().getUserList(page, limit);
-        JSONObject returnData = new JSONObject();
-        if(MvcDataDto.SUCCESS.equals(serviceData.getResultCode())){
-            JSONArray objects = (JSONArray)serviceData.getResultObj();
-            returnData.put("code",0);
-            returnData.put("msg","");
-            returnData.put("count",Integer.parseInt(serviceData.getResultMessage()));
-            returnData.put("data",objects);
-        }
-        return returnData;
+        return getUserService().getUserList(page, limit);
     }
 
-    @RequestMapping("/test")
-    public String test() {
-        return "template";
+    @RequestMapping("/register")
+    @ResponseBody
+    public Object register(@RequestParam("user_id") String userId, @RequestParam("user_password") String userPassword,@RequestParam("user_list") Object users) throws Exception {
+        JSONArray userList = JSONArray.parseArray(users.toString());
+        MvcDataDto data = getUserService().login(userId, userPassword, IUserDao.CLASS_USERID);
+        //密码正确
+        if (data.getCode()==MvcDataDto.SUCCESS) {
+            List<User> list = new LinkedList<>();
+            for (int i = 0; i < userList.size(); i++) {
+                User user = new User();
+                user.setUserName(userList.getJSONObject(i).getString("userName"));
+                user.setUserWorkNumber(userList.getJSONObject(i).getString("userWorkNumber"));
+                user.setUserPassword(DigestUtils.sha1Hex(userList.getJSONObject(i).getString("userPassword")));
+                user.setUserCollege(userList.getJSONObject(i).getString("userCollege"));
+                user.setUserPhoneNumber(userList.getJSONObject(i).getString("userPhoneNumber"));
+                list.add(user);
+            }
+            data = getUserService().batchRegister(list);
+            data.setUrl("/QBank/user/userManagement");
+        } else {
+            data = new MvcDataDto();
+            data.setCode(MvcDataDto.FAIL);
+            data.setMsg("您没有操作权限");
+        }
+        return data;
     }
+
+
 }

@@ -2,6 +2,7 @@ package com.qbank.qbank.service.inf;
 
 import com.qbank.qbank.dto.MvcDataDto;
 import com.qbank.qbank.entity.User;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -9,6 +10,7 @@ import java.util.List;
  * @author 王宇杰
  * @date 2020/1/9 14:30
  */
+@Service
 public interface IUserService {
     /**
      * 用户登录
@@ -66,5 +68,5 @@ public interface IUserService {
      * @return UserList
      * @throws Exception e
      */
-    List<User> getAllUserList() throws Exception;
+    MvcDataDto getAllUserList() throws Exception;
 }

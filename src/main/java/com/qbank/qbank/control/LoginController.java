@@ -1,6 +1,5 @@
 package com.qbank.qbank.control;
 
-import com.alibaba.fastjson.JSONObject;
 import com.qbank.qbank.dao.inf.IUserDao;
 import com.qbank.qbank.dto.MvcDataDto;
 import com.qbank.qbank.entity.User;
@@ -12,7 +11,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.qbank.qbank.dao.impl.UserDaoImpl.getUserDao;
 import static com.qbank.qbank.service.impl.UserServiceImpl.getUserService;
 
 
@@ -22,20 +20,19 @@ import static com.qbank.qbank.service.impl.UserServiceImpl.getUserService;
  */
 @Controller
 @RequestMapping("/login")
-public class LoginControl {
+public class LoginController {
 
     @RequestMapping("/index")
     public String index() {
         return "login";
     }
 
-
     @RequestMapping("/login")
     @ResponseBody
     public Object login(@RequestParam("user_work_number") String userWorkNumber, @RequestParam("user_password") String userPassword) throws Exception {
         MvcDataDto data = getUserService().login(userWorkNumber, userPassword, IUserDao.CLASS_USERWORKNUMBER);
-        if (MvcDataDto.SUCCESS.equals(data.getResultCode())) {
-            data.setRedirectUrl("/QBank/main");
+        if (MvcDataDto.SUCCESS==data.getCode()) {
+            data.setUrl("/QBank/main");
         }
         return data;
     }

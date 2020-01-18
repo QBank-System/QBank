@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>excel导出扩展分享</title>
+    <link rel="stylesheet" type="text/css" href="../static/frame/layui/css/layui.css">
+    <script type="text/javascript" src="../static/frame/layui/layui.js"></script>
+    <script type="text/javascript" src="../static/frame/jquery/jquery.js"></script>
+    <script type="text/javascript">
+        layui.config({
+            base: '../static/frame/layui/'
+        }).extend({
+            excel: 'excel'
+        });
+        layui.use(['excel'], function () {
+
+            $(function () {
+                // 监听上传文件的事件
+                $('#LAY-excel-import-excel').change(function (e) {
+                    const files = Object.values(e.target.files);
+                    layui.excel.importExcel(files, {}, function (data) {
+                        console.log("data:" + JSON.stringify(data));
+                    })
+                })
+
+            })
+        })
+    </script>
+</head>
+<body>
+<div class="layui-form-block">
+    <input type="file" class="layui-btn layui-btn-primary" id="LAY-excel-import-excel"
+           multiple="multiple">
+</div>
+</body>
+</html>

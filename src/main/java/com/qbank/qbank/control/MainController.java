@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @date 2020/1/11 19:40
  */
 @Controller
-public class MainControl {
+public class MainController {
 
     @RequestMapping("")
     public String index() {
@@ -19,6 +19,5 @@ public class MainControl {
     public String main() {
         return "main";
     }
-
 
 }

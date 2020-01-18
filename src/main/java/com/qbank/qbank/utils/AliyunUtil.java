@@ -5,7 +5,6 @@ import com.aliyuncs.CommonResponse;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.http.MethodType;
 import com.aliyuncs.profile.DefaultProfile;
 
@@ -15,14 +14,14 @@ import java.util.Properties;
 /**
  * @author Gemini
  */
-public class AliyunTool {
+public class AliyunUtil {
     private static String accessKeyId;
     private static String accessSecret;
 
     static {
         Properties properties = new Properties();
         try {
-            properties.load(DatabaseOperations.class.getClassLoader().getResourceAsStream("application.properties"));
+            properties.load(DBUtil.class.getClassLoader().getResourceAsStream("application.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

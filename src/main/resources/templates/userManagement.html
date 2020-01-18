@@ -45,7 +45,6 @@
 <script>
     layui.use('element', function () {
         var element = layui.element;
-
     });
     const user = JSON.parse(sessionStorage.getItem("QbankUser"));
     let userId = 'null';
@@ -54,8 +53,8 @@
         userId = user["userId"];
         userPassword = user["userPassword"];
     }
-    const url1 = "/QBank/user/view?user_id="+userId+"&user_password="+userPassword;
-    const url2 = "/QBank/user/register?user_id="+userId+"&user_password="+userPassword;
+    const url1 = "/QBank/user/listView?user_id="+userId+"&user_password="+userPassword;
+    const url2 = "/QBank/user/registerView?user_id="+userId+"&user_password="+userPassword;
     new Vue({
         el: '#myContent',
         data: {

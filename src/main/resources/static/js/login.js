@@ -22,11 +22,11 @@ function init() {
             data: data,
             type: "GET",
             success: function (data) {
-                alert(data["resultMessage"]);
-                if ("success" === data["resultCode"]) {
+                alert(data["msg"]);
+                if (0 === data["code"]) {
                     //TODO 加密
-                    sessionStorage.setItem("QbankUser", JSON.stringify(data["resultObj"]));
-                    window.location.href = data["redirectUrl"];
+                    sessionStorage.setItem("QbankUser", JSON.stringify(data["data"]));
+                    window.location.href = data["url"];
                 }
             }
         });

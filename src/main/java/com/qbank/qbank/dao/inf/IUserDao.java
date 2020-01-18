@@ -11,9 +11,9 @@ import java.util.List;
  * @date 2020/1/9 12:44
  */
 public interface IUserDao {
-    public static final int CLASS_USERID = 1;
-    public static final int CLASS_USERWORKNUMBER = 2;
-    public static final int CLASS_USERNAME = 3;
+    int CLASS_USERID = 1;
+    int CLASS_USERWORKNUMBER = 2;
+    int CLASS_USERNAME = 3;
 
     //增
 

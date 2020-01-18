@@ -19,4 +19,8 @@ public class QuestionLibs {
 
     }
 
+    public static void main(String[] args) {
+
+    }
+
 }

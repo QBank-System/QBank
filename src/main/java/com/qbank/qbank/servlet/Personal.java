@@ -2,9 +2,9 @@ package com.qbank.qbank.servlet;
 
 import com.aliyuncs.exceptions.ClientException;
 import com.google.gson.JsonObject;
-import com.qbank.qbank.utils.AliyunTool;
-import com.qbank.qbank.utils.DatabaseOperations;
-import com.qbank.qbank.utils.LogBook;
+import com.qbank.qbank.utils.AliyunUtil;
+import com.qbank.qbank.utils.DBUtil;
+import com.qbank.qbank.utils.LogUtil;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -16,7 +16,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import static com.qbank.qbank.utils.MyTime.getTime;
+import static com.qbank.qbank.utils.TimeUtil.getTime;
 
 /**
  * @author wangyujie
@@ -37,7 +37,7 @@ public class Personal {
         operator = workNumber;
         JsonObject result = new JsonObject();
         try {
-            Connection conn = DatabaseOperations.getConnection();
+            Connection conn = DBUtil.getConnection();
             PreparedStatement pstm;
             ResultSet rs;
             String sql;
@@ -74,7 +74,7 @@ public class Personal {
             remark += "SQLException\n";
             e.printStackTrace();
         }
-        LogBook.log(operation, operator, remark);
+        LogUtil.log(operation, operator, remark);
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 
@@ -91,7 +91,7 @@ public class Personal {
         operator = workNumber;
         JsonObject result = new JsonObject();
         try {
-            Connection conn = DatabaseOperations.getConnection();
+            Connection conn = DBUtil.getConnection();
             PreparedStatement pstm;
             ResultSet rs;
             String sql;
@@ -133,7 +133,7 @@ public class Personal {
                     remark += "插入数据库数据失败，改变行数!=1\n";
                 }
             }
-            DatabaseOperations.closeAll(conn, pstm, null);
+            DBUtil.closeAll(conn, pstm, null);
         } catch (SQLException e) {
             result = new JsonObject();
             result.addProperty("state", -1);
@@ -141,7 +141,7 @@ public class Personal {
             remark += "SQLException\n";
             e.printStackTrace();
         }
-        LogBook.log(operation, operator, remark);
+        LogUtil.log(operation, operator, remark);
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 
@@ -155,7 +155,7 @@ public class Personal {
         operator = "phone:" + phoneNumber;
         JsonObject result = new JsonObject();
         try {
-            AliyunTool.sendSMS(phoneNumber, code);
+            AliyunUtil.sendSMS(phoneNumber, code);
             result.addProperty("state", 1);
             JsonObject object = new JsonObject();
             object.addProperty("phone_number", phoneNumber);
@@ -169,7 +169,7 @@ public class Personal {
             remark += "ClientException\n";
             e.printStackTrace();
         }
-        LogBook.log(operation, operator, remark);
+        LogUtil.log(operation, operator, remark);
         return new ResponseEntity<>(result.toString(), HttpStatus.OK);
     }
 

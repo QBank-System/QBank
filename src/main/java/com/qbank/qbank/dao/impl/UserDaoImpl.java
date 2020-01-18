@@ -2,7 +2,7 @@ package com.qbank.qbank.dao.impl;
 
 import com.qbank.qbank.dao.inf.IUserDao;
 import com.qbank.qbank.entity.User;
-import com.qbank.qbank.utils.DatabaseOperations;
+import com.qbank.qbank.utils.DBUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.Connection;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
 
-import static com.qbank.qbank.utils.MyTime.getTime;
+import static com.qbank.qbank.utils.TimeUtil.getTime;
 
 /**
  * @author 王宇杰
@@ -26,7 +26,7 @@ public class UserDaoImpl implements IUserDao {
     private String sql;
 
     public UserDaoImpl() {
-        this.conn = DatabaseOperations.getConnection();
+        this.conn = DBUtil.getConnection();
     }
 
     public static UserDaoImpl getUserDao() {
@@ -37,7 +37,7 @@ public class UserDaoImpl implements IUserDao {
     }
 
     public void closeAll() {
-        DatabaseOperations.closeAll(conn, pstm, rs);
+        DBUtil.closeAll(conn, pstm, rs);
     }
 
     @Override
@@ -53,7 +53,7 @@ public class UserDaoImpl implements IUserDao {
         int result;
         sql = "insert into user(work_number,password,name,college,phone_number,grade,time)value(?,?,?,?,?,?,?)";
         pstm = conn.prepareStatement(sql);
-        result = DatabaseOperations.exUpdate(pstm, objects);
+        result = DBUtil.exUpdate(pstm, objects);
         return result;
     }
 
@@ -86,7 +86,7 @@ public class UserDaoImpl implements IUserDao {
                 return 0;
         }
         pstm = conn.prepareStatement(sql);
-        result = DatabaseOperations.exUpdate(pstm, objects);
+        result = DBUtil.exUpdate(pstm, objects);
         sql = "select user.id from user order by user.id desc limit 1;";
         pstm = conn.prepareStatement(sql);
         rs = pstm.executeQuery();
@@ -122,10 +122,10 @@ public class UserDaoImpl implements IUserDao {
         objects[9] = user.getUserOffice();
         objects[10] = user.getUserId();
         int result;
-        conn = DatabaseOperations.getConnection();
+        conn = DBUtil.getConnection();
         sql = "update user set user.case=?,user.work_number=?,user.password=?,user.name=?,user.title=?,user.college=?,user.professional_field=?,user.phone_number=?,user.mail=?,user.office=?where user.id=?;";
         pstm = conn.prepareStatement(sql);
-        result = DatabaseOperations.exUpdate(pstm, objects);
+        result = DBUtil.exUpdate(pstm, objects);
         return result;
     }
 
@@ -158,7 +158,7 @@ public class UserDaoImpl implements IUserDao {
                 return null;
         }
         pstm = conn.prepareStatement(sql);
-        rs = DatabaseOperations.exQuery(pstm, objects);
+        rs = DBUtil.exQuery(pstm, objects);
         if (rs.next()) {
             user.setUserId(rs.getString(1));
             user.setUserCase(rs.getString(2));
@@ -189,7 +189,7 @@ public class UserDaoImpl implements IUserDao {
         objects[2] = index;
         sql = "select * from user where cast(user.id as char) like ? or cast(user.work_number as char)  like ? or user.name  like ? ;";
         pstm = conn.prepareStatement(sql);
-        rs = DatabaseOperations.exQuery(pstm, objects);
+        rs = DBUtil.exQuery(pstm, objects);
         while (rs.next()) {
             User user = new User();
             user.setUserId(rs.getString(1));

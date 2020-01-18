@@ -1,7 +1,6 @@
 package com.qbank.qbank.dao.impl;
 
 import com.qbank.qbank.entity.User;
-import com.qbank.qbank.utils.DatabaseOperations;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -9,7 +8,6 @@ import org.junit.jupiter.api.Test;
 import java.sql.SQLException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Scanner;
 
 import static com.qbank.qbank.dao.impl.UserDaoImpl.CLASS_USERWORKNUMBER;
 import static com.qbank.qbank.dao.impl.UserDaoImpl.getUserDao;
@@ -86,9 +84,9 @@ class UserDaoImplTest {
     void delUsers() throws SQLException {
         String[] index = new String[3];
         int[] indexClass = new int[3];
-        index[0] = "1705010450";
-        index[1] = "1705010451";
-        index[2] = "1705010452";
+        index[0] = "2";
+        index[1] = "4";
+        index[2] = "435";
         indexClass[0] = CLASS_USERWORKNUMBER;
         indexClass[1] = CLASS_USERWORKNUMBER;
         indexClass[2] = CLASS_USERWORKNUMBER;

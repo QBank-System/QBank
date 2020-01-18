@@ -2,32 +2,205 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>upload模块快速使用</title>
+    <title>Layui</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link rel="stylesheet" href="../static/frame/layui/css/layui.css" media="all">
+    <!-- 注意：如果你直接复制所有代码到本地，上述css路径需要改成你本地的 -->
 </head>
 <body>
 
-<button type="button" class="layui-btn" id="test1">
-    <i class="layui-icon">&#xe67c;</i>上传图片
-</button>
-
+<table class="layui-table" id="test3" lay-filter="test3"></table>
+<script type="text/html" id="toolbarDemo">
+    <div class="layui-btn-container">
+        <button class="layui-btn layui-btn-sm" lay-event="addUser"><i class="layui-icon">&#xe624;</i>添加</button>
+        <button class="layui-btn layui-btn-sm" lay-event="delSelectedUsers"><i class="layui-icon">&#xe640;</i>删除选中
+        </button>
+        <input style="width: 82px" type="file" class="layui-btn layui-btn-sm"
+               id="LAY-excel-import-excel" lay-event="addUserFromExcl">
+        <button class="layui-btn layui-btn-sm" lay-event="registerSelectedUser"><i class="layui-icon">&#xe605;</i>完成并注册
+        </button>
+    </div>
+</script>
 <script src="../static/frame/layui/layui.js" charset="utf-8"></script>
+<script src="../static/frame/jquery/jquery.js" charset="utf-8"></script>
+<!-- 注意：如果你直接复制所有代码到本地，上述js路径需要改成你本地的 -->
 <script>
-    layui.use('upload', function(){
-        var upload = layui.upload;
+    layui.config({
+        base: '../static/frame/layui/'
+    }).extend({
+        excel: 'excel'
+    });
+    let newUsers = [{
+        "userId": 1,
+        "userName": "",
+        "userWorkNumber": "",
+        "userPassword": "",
+        "userCollege": "",
+        "userPhoneNumber": ""
+    }];
+    layui.use(['table', 'excel'], function () {
+        let table = layui.table;
+        table.render({
+            elem: '#test3'
+            , cols: [
+                [
+                    {checkbox: true, fixed: true}
+                    , {field: 'userName', title: '姓名', edit: 'text'}
+                    , {field: 'userWorkNumber', title: '学工号', edit: 'text', sort: true}
+                    , {field: 'userPassword', title: '密码', edit: 'text'}
+                    , {field: 'userCollege', title: '所属学院', edit: 'text'}
+                    , {field: 'userPhoneNumber', title: '电话号码', edit: 'text'}
+                ]
+            ]
+            , defaultToolbar: ['filter', 'exports']
+            , toolbar: '#toolbarDemo'
+            , id: 'testReload'
+            , page: true
+            , data: newUsers
+        });
 
-        //执行实例
-        var uploadInst = upload.render({
-            elem: '#test1' //绑定元素
-            ,url: '' //上传接口
-            ,done: function(res){
-                //上传完毕回调
+        //监听单元格编辑
+        table.on('edit(test3)', function (obj) {
+            var value = obj.value //得到修改后的值
+                , data = obj.data //得到所在行所有键值
+                , field = obj.field; //得到字段
+            //layer.msg('[ID: ' + data.id + '] ' + field + ' 字段更改为：' + value);
+        });
+
+        $(function () {
+            // 监听上传文件的事件
+            $('#LAY-excel-import-excel').change(function (e) {
+                var files = Object.values(e.target.files);
+                layui.excel.importExcel(files, {}, function (data) {
+                    for (let key1 in data) {
+                        let tables = data[key1];
+                        for (let key2 in tables) {
+                            let table1 = tables[key2];
+                            for (let i = 0; i < table1.length; i++) {
+                                let row = {
+                                    "userId": newUsers[newUsers.length-1]["userId"] + 1,
+                                    "userName": table1[i]["A"],
+                                    "userWorkNumber": table1[i]["B"],
+                                    "userPassword": table1[i]["C"],
+                                    "userCollege": table1[i]["D"],
+                                    "userPhoneNumber": table1[i]["E"]
+                                };
+                                newUsers.push(row);
+                            }
+                        }
+                    }
+                    $(".layui-laypage-btn").click();
+                })
+            })
+        });
+
+        //头工具栏事件
+        table.on('toolbar(test3)', function (obj) {
+            var checkStatus = table.checkStatus(obj.config.id);
+            switch (obj.event) {
+                case 'addUser':
+                    const user = {
+                        "userId": newUsers[newUsers.length-1]["userId"] + 1,
+                        "userName": "",
+                        "userWorkNumber": "",
+                        "userPassword": "",
+                        "userCollege": "",
+                        "userPhoneNumber": ""
+                    };
+                    newUsers.push(user);
+                    break;
+                case 'delSelectedUsers':
+                    for (let i = 0; i < newUsers.length; i++) {
+                        if (newUsers[i]["LAY_CHECKED"] === true) {
+                            newUsers.splice(i, 1);
+                            i--;
+                        }
+                    }
+                    break;
+                case 'addUserFromExcl':
+                    break;
+                case 'registerSelectedUser':
+                    let users = [];
+                    for (let i = 0; i < newUsers.length; i++) {
+                        if (newUsers[i]["LAY_CHECKED"] === true) {
+                            users.push(newUsers[i]);
+                        }
+                    }
+                    const QbankUser = JSON.parse(sessionStorage.getItem("QbankUser"));
+                    let userId = 'null';
+                    let userPassword = 'null';
+                    if (QbankUser !== null) {
+                        userId = QbankUser["userId"];
+                        userPassword = QbankUser["userPassword"];
+                    }
+                    const url = "/QBank/user/register";
+                    const data = {"user_id": userId, "user_password": userPassword, "user_list": JSON.stringify(users)};
+                    //console.log(data);
+                    $.ajax({
+                        url: url,
+                        dataType: "json",
+                        async: true,
+                        data: data,
+                        type: "GET",
+                        success: function (data) {
+                            alert(data["msg"]);
+                            switch (data["code"]) {
+                                case 0:
+                                    window.location.href = data["url"];
+                                    break;
+                                case 1:
+                                    let list = data["data"];
+                                    let newList = [];
+                                    let index = newUsers[newUsers.length-1]["userId"] + 1;
+                                    for(let i = 0 ; i <list.length;i++){
+                                        if(-1===list[i]["code"]){
+                                            let user = {
+                                                "userId": index++,
+                                                "userName": newUsers[i]["userName"],
+                                                "userWorkNumber": newUsers[i]["userWorkNumber"],
+                                                "userPassword": newUsers[i]["userPassword"],
+                                                "userCollege":newUsers[i]["userCollege"],
+                                                "userPhoneNumber": newUsers[i]["userPhoneNumber"]
+                                            };
+                                            newList.push(user);
+                                        }
+                                    }
+                                    newUsers = newList;
+                                    table.render({
+                                        elem: '#test3'
+                                        , cols: [
+                                            [
+                                                {checkbox: true, fixed: true}
+                                                , {field: 'userName', title: '姓名', edit: 'text'}
+                                                , {field: 'userWorkNumber', title: '学工号', edit: 'text', sort: true}
+                                                , {field: 'userPassword', title: '密码', edit: 'text'}
+                                                , {field: 'userCollege', title: '所属学院', edit: 'text'}
+                                                , {field: 'userPhoneNumber', title: '电话号码', edit: 'text'}
+                                            ]
+                                        ]
+                                        , defaultToolbar: ['filter', 'exports']
+                                        , toolbar: '#toolbarDemo'
+                                        , id: 'testReload'
+                                        , page: true
+                                        , data: newUsers
+                                    });
+
+                                //$(".layui-laypage-btn").click();
+                                    //newUsers = newList;
+                                    //console.log(newUsers);
+                            }
+                        }
+                    });
+                    break;
             }
-            ,error: function(){
-                //请求异常回调
-            }
+
+            $(".layui-laypage-btn").click();
+
         });
     });
 </script>
+
 </body>
 </html>

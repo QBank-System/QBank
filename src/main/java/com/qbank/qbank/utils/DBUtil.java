@@ -9,7 +9,7 @@ import java.util.Properties;
 /**
  * @author Gemini
  */
-public class DatabaseOperations {
+public class DBUtil {
 
     private static String driver;
     private static String url;
@@ -19,7 +19,7 @@ public class DatabaseOperations {
 
     static {
         Properties properties = new Properties();
-        InputStream is = DatabaseOperations.class.getClassLoader().getResourceAsStream("application.properties");
+        InputStream is = DBUtil.class.getClassLoader().getResourceAsStream("application.properties");
         try {
             properties.load(is);
         } catch (IOException e) {

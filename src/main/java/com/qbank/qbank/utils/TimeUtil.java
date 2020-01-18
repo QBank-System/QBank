@@ -5,7 +5,7 @@ import java.util.Calendar;
 /**
  * @author wangyujie
  */
-public class MyTime {
+public class TimeUtil {
 
     public static void main(String[] args) {
         System.out.println(getTime());
