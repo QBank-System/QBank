@@ -1,6 +1,5 @@
 package com.qbank.qbank.entity;
 
-import com.alibaba.fastjson.JSONObject;
 import lombok.Data;
 import lombok.experimental.Accessors;
 

@@ -20,7 +20,7 @@ function init() {
             dataType: "json",
             async: true,
             data: data,
-            type: "GET",
+            type: "POST",
             success: function (data) {
                 alert(data["msg"]);
                 if (0 === data["code"]) {

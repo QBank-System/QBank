@@ -19,7 +19,7 @@ public class DBUtil {
 
     static {
         Properties properties = new Properties();
-        InputStream is = DBUtil.class.getClassLoader().getResourceAsStream("application.properties");
+        InputStream is = DBUtil.class.getClassLoader().getResourceAsStream("web.properties");
         try {
             properties.load(is);
         } catch (IOException e) {

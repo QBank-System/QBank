@@ -51,7 +51,7 @@ public class UserDaoImpl implements IUserDao {
         objects[5] = 2;
         objects[6] = getTime();
         int result;
-        sql = "insert into user(work_number,password,name,college,phone_number,grade,time)value(?,?,?,?,?,?,?)";
+        sql = "insert into sys_user(sys_user_worknumber,sys_user_password,sys_user_name,sys_user_college,sys_user_phonenumber,sys_user_grade,sys_user_createtime)value(?,?,?,?,?,?,?)";
         pstm = conn.prepareStatement(sql);
         result = DBUtil.exUpdate(pstm, objects);
         return result;
@@ -74,25 +74,25 @@ public class UserDaoImpl implements IUserDao {
         int result;
         switch (indexClass) {
             case CLASS_USERID:
-                sql = "delete from user where user.id=?;";
+                sql = "delete from sys_user where sys_user.sys_user_id=?;";
                 break;
             case CLASS_USERWORKNUMBER:
-                sql = "delete from user where user.work_number=?;";
+                sql = "delete from sys_user where sys_user.sys_user_worknumber=?;";
                 break;
             case CLASS_USERNAME:
-                sql = "delete from user where user.name=?;";
+                sql = "delete from sys_user where sys_user.sys_user_name=?;";
                 break;
             default:
                 return 0;
         }
         pstm = conn.prepareStatement(sql);
         result = DBUtil.exUpdate(pstm, objects);
-        sql = "select user.id from user order by user.id desc limit 1;";
+        sql = "select sys_user.sys_user_id from sys_user order by sys_user.sys_user_id desc limit 1;";
         pstm = conn.prepareStatement(sql);
         rs = pstm.executeQuery();
         rs.next();
         int autoIncrement = rs.getInt(1);
-        sql = "alter table qbank.user auto_increment=" + autoIncrement + ";";
+        sql = "alter table QBank.sys_user auto_increment=" + autoIncrement + ";";
         pstm = conn.prepareStatement(sql);
         pstm.executeUpdate();
         return result;
@@ -123,7 +123,7 @@ public class UserDaoImpl implements IUserDao {
         objects[10] = user.getUserId();
         int result;
         conn = DBUtil.getConnection();
-        sql = "update user set user.case=?,user.work_number=?,user.password=?,user.name=?,user.title=?,user.college=?,user.professional_field=?,user.phone_number=?,user.mail=?,user.office=?where user.id=?;";
+        sql = "update sys_user set sys_user.sys_user_case=?,sys_user.sys_user_worknumber=?,sys_user.sys_user_password=?,sys_user.sys_user_name=?,sys_user.sys_user_title=?,sys_user.sys_user_college=?,sys_user.sys_user_professionalfield=?,sys_user.sys_user_phonenumber=?,sys_user.sys_user_mail=?,sys_user.sys_user_office=?where sys_user.sys_user_id=?;";
         pstm = conn.prepareStatement(sql);
         result = DBUtil.exUpdate(pstm, objects);
         return result;
@@ -146,13 +146,13 @@ public class UserDaoImpl implements IUserDao {
         User user = new User();
         switch (indexClass) {
             case CLASS_USERID:
-                sql = "select * from user where user.id=?;";
+                sql = "select * from sys_user where sys_user.sys_user_id=?;";
                 break;
             case CLASS_USERWORKNUMBER:
-                sql = "select * from user where user.work_number=?;";
+                sql = "select * from sys_user where sys_user.sys_user_worknumber=?;";
                 break;
             case CLASS_USERNAME:
-                sql = "select * from user where user.name=?;";
+                sql = "select * from sys_user where sys_user.sys_user_name=?;";
                 break;
             default:
                 return null;
@@ -187,7 +187,7 @@ public class UserDaoImpl implements IUserDao {
         objects[0] = index;
         objects[1] = index;
         objects[2] = index;
-        sql = "select * from user where cast(user.id as char) like ? or cast(user.work_number as char)  like ? or user.name  like ? ;";
+        sql = "select * from sys_user where cast(sys_user.sys_user_id as char) like ? or cast(sys_user.sys_user_worknumber as char)  like ? or sys_user.sys_user_name  like ? ;";
         pstm = conn.prepareStatement(sql);
         rs = DBUtil.exQuery(pstm, objects);
         while (rs.next()) {

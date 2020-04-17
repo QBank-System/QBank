@@ -21,7 +21,7 @@ public class AliyunUtil {
     static {
         Properties properties = new Properties();
         try {
-            properties.load(DBUtil.class.getClassLoader().getResourceAsStream("application.properties"));
+            properties.load(DBUtil.class.getClassLoader().getResourceAsStream("web.properties"));
         } catch (IOException e) {
             e.printStackTrace();
         }

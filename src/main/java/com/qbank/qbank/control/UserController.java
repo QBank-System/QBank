@@ -2,15 +2,23 @@ package com.qbank.qbank.control;
 
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
+import com.aliyuncs.exceptions.ClientException;
+import com.google.gson.JsonObject;
 import com.qbank.qbank.dao.inf.IUserDao;
 import com.qbank.qbank.dto.MvcDataDto;
 import com.qbank.qbank.entity.User;
+import com.qbank.qbank.utils.AliyunUtil;
+import com.qbank.qbank.utils.LogUtil;
 import org.apache.commons.codec.digest.DigestUtils;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.thymeleaf.spring5.expression.Mvc;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -80,6 +88,28 @@ public class UserController {
             data = new MvcDataDto();
             data.setCode(MvcDataDto.FAIL);
             data.setMsg("您没有操作权限");
+        }
+        return data;
+    }
+
+
+    @RequestMapping("/SendVerificationCode")
+    @ResponseBody
+    public Object sendVerificationCode(@RequestParam("phoneNumber") String phoneNumber) {
+        int code = ((int) ((Math.random() * 9 + 1) * 100000));
+        MvcDataDto data = new MvcDataDto();
+        try {
+            AliyunUtil.sendSMS(phoneNumber, code);
+            JsonObject object = new JsonObject();
+            object.addProperty("phone_number", phoneNumber);
+            object.addProperty("verification_code", code);
+            data.setCode(MvcDataDto.SUCCESS);
+            data.setData(object);
+            data.setMsg("发送成功");
+        } catch (ClientException e) {
+            data.setCode(MvcDataDto.FAIL);
+            data.setMsg("发送失败");
+            e.printStackTrace();
         }
         return data;
     }

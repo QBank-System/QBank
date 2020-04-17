@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.qbank.qbank.dao.IUserDao">
+    <insert id="addUser" parameterType="com.qbank.qbank.entity.User">
+        insert into `user`(work_number, password, name, college, phone_number, grade, time)
+        values (#{userWorkNumber}, '${@org.apache.commons.codec.digest.DigestUtils.sha1Hex@#{userPassword}}',
+                #{userName}, #{userCollege}, #{userPhoneNumber}, 2, '${@com.wyj.cn.utils.TimeUtil@getTime()}')
+    </insert>
+    <insert id="addUsers" parameterType="com.qbank.qbank.entity.User">
+        insert into `user`(work_number, password, name, college, phone_number, grade, time)
+        values (#{userWorkNumber}, '${@org.apache.commons.codec.digest.DigestUtils.sha1Hex@#{userPassword}}',
+                #{userName}, #{userCollege}, #{userPhoneNumber}, 2, '${@com.wyj.cn.utils.TimeUtil@getTime()}')
+    </insert>
+</mapper>
