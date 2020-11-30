@@ -4,7 +4,7 @@ server:
   tomcat:
     uri-encoding: UTF-8
     max-http-form-post-size: 2097152
-  port: 8080
+  port: 9991
 spring:
   datasource:
     url: jdbc:mysql://wangyujie.top:3306/QBank?serverTimezone=UTC&useUnicode=true&characterEncoding=utf8&useSSL=false&autoReconnect=true
