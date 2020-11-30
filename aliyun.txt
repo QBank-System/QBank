@@ -1,3 +1,0 @@
-#aliyun工具
-accessKeyId=LTAIjq8JY8CiYhxN
-accessSecret=LWSdWSJLVp2nrm2phOtwlHGABQGeZ4
